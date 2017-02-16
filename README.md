@@ -1,6 +1,8 @@
-This repo holds lecture notes for an Elixir workshop.
+This repo holds my notes to prepare for an Elixir workshop.
 
-The intro_elixir_lecture covers the basics of Elixir in way too much depth.
+The intro_elixir_lecture covers the basics of Elixir; intro_elixir_notes
+provides much more excessively detailed background information for that
+lecture.
 
 The intro_phoenix_lecture covers the Phoenix framework, comparing it mostly to
 Rails.
