@@ -10,3 +10,5 @@ Rails.
 The phoenix_chat_demo has instructions on how to create a chat app with
 Phoenix. It is a simplified version of the instructions available on
 phoenixframework.org
+
+Demos can be found in `/demos`.
