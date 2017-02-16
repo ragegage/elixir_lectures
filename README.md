@@ -1,0 +1,1 @@
+This repo holds lecture notes for an Elixir workshop.
