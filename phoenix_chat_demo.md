@@ -84,3 +84,6 @@ end
 ---
 
 all done!
+
+Note:
+next up is adding auth a lá https://meatherly.github.io/2015/05/11/phoenixauthentication/ and http://nithinbekal.com/posts/phoenix-authentication/
