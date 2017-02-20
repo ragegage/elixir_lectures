@@ -4,6 +4,9 @@
 
 create a new phoenix app
 
+Note:
+mix phoenix.new APP_NAME
+
 ---
 
 set up the channel in `web/channels/user_socket.ex`
