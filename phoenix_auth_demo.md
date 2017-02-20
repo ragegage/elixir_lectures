@@ -204,13 +204,6 @@ session controller
 
 session view & template
 
-add `:guardian` as a dependency to handle sessions (via JWTs?)
-+ have to add a serializer module to `web/auth`
-
-find user by email, see if the pw matches, `Guardian.Plug.sign_in(user)`
-
-add a current_user helper module and a `:with_session` pipeline
-
 Note:
 `resources "/sessions", SessionController, only: [:new, :create, :delete]`
 
@@ -260,6 +253,17 @@ end
 </li>
 ```
 
+---
+
+## creating sessions part 2
+
+add `:guardian` as a dependency to handle sessions (via JWTs?)
++ have to add a serializer module to `web/auth`
+
+session controller create
++ find user by email, see if the pw matches, `Guardian.Plug.sign_in(user)`
+
+Note:
 ```
 # config.exs
 config :guardian, Guardian,
@@ -280,6 +284,76 @@ defmodule LoginApp.GuardianSerializer do
   def for_token(_), do: { :error, "Unknown resource type" }
   def from_token("User:" <> id), do: { :ok, Repo.get(User, id) }
   def from_token(_), do: { :error, "Unknown resource type" }
+end
+```
+
+```
+# web/controllers/session_controller.ex
+import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
+alias SimpleAuth.User
+# ...
+def create(conn, %{"session" => %{"email" => email,
+                                  "password" => password}}) do
+  # try to get user by unique email from DB
+  user = Repo.get_by(User, email: email)
+  # examine the result
+  result = cond do
+    # if user was found and provided password digest equals to stored
+    # digest
+    user && checkpw(password, user.password_digest) ->
+      {:ok, login(conn, user)}
+    # else if we just found the use
+    user ->
+      {:error, :unauthorized, conn}
+    # otherwise
+    true ->
+      # simulate check password hash timing
+      dummy_checkpw
+      {:error, :not_found, conn}
+  end
+  case result do
+    {:ok, conn} ->
+      conn
+      |> put_flash(:info, "You’re now logged in!")
+      |> redirect(to: page_path(conn, :index))
+    {:error, _reason, conn} ->
+      conn
+      |> put_flash(:error, "Invalid email/password combination")
+      |> render("new.html")
+  end
+end
+defp login(conn, user) do
+  conn
+  |> Guardian.Plug.sign_in(user)
+end
+```
+
+---
+
+## current_user
+
+add a current_user helper module and a `:with_session` pipeline
+
+Note:
+```
+# web/auth/current_user.ex
+defmodule SimpleAuth.CurrentUser do
+  import Plug.Conn
+  import Guardian.Plug
+  def init(opts), do: opts
+  def call(conn, _opts) do
+    current_user = current_resource(conn)
+    assign(conn, :current_user, current_user)
+  end
+end
+```
+
+```
+# web/router.ex
+pipeline :with_session do
+  plug Guardian.Plug.VerifySession
+  plug Guardian.Plug.LoadResource
+  plug SimpleAuth.CurrentUser
 end
 ```
 
