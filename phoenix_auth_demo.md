@@ -357,11 +357,47 @@ pipeline :with_session do
 end
 ```
 
+`pipe_through [:browser, :with_session]`
+
 ---
 
 ## deleting sessions
 
 `Guardian.Plug.sign_out(conn)`; redirect
+
+Note:
+```
+def delete(conn, _) do
+  conn
+  |> logout
+  |> put_flash(:info, "See you later!")
+  |> redirect(to: page_path(conn, :index))
+end
+defp logout(conn) do
+  Guardian.Plug.sign_out(conn)
+end
+```
+
+---
+
+## refactor view
+
+Note:
+```
+<ul class="nav nav-pills pull-right">
+  <%= if @current_user do %>
+    <li><%= @current_user.email %> (<%= @current_user.id %>)</li>
+    <li>
+      <%= link "Sign out", to: session_path(@conn, :delete,
+                                            @current_user),
+                           method: "delete" %>
+    </li>
+  <% else %>
+    <li><%= link "Register", to: user_path(@conn, :new) %></li>
+    <li><%= link "Sign in", to: session_path(@conn, :new) %></li>
+  <% end %>
+</ul>
+```
 
 ---
 
