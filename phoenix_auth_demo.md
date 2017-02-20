@@ -141,7 +141,7 @@ Note:
 ```
 # mix.exs
 def application do
-  [mod: {SimpleAuth, []},
+  [mod: {LoginApp, []},
    applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :phoenix_ecto, :postgrex, :comeonin]]
 end
 defp deps do
@@ -198,9 +198,14 @@ def create(conn, %{"user" => user_params}) do
 
 ## creating sessions
 
-session controller & routes
+session routes
+
+session controller
+
+session view & template
 
 add `:guardian` as a dependency to handle sessions (via JWTs?)
++ have to add a serializer module to `web/auth`
 
 find user by email, see if the pw matches, `Guardian.Plug.sign_in(user)`
 
@@ -208,6 +213,52 @@ add a current_user helper module and a `:with_session` pipeline
 
 Note:
 `resources "/sessions", SessionController, only: [:new, :create, :delete]`
+
+```
+defmodule LoginApp.SessionController do
+  use LoginApp.Web, :controller
+  plug :scrub_params, "session" when action in [:create]
+  def new(conn, _) do
+    render conn, "new.html"
+  end
+  def create(conn, %{"session" => %{"email" => email,
+                                    "password" => password}}) do
+  end
+  def delete(conn, _) do
+  end
+end
+```
+
+```
+# web/views/session_view.ex
+defmodule LoginApp.SessionView do
+  use LoginApp.Web, :view
+end
+```
+
+```
+# web/templates/session/new.html.eex
+<h1>Sign in</h1>
+<%= form_for @conn, session_path(@conn, :create),
+                                          [as: :session], fn f -> %>
+  <div class="form-group">
+    <%= text_input f, :email, placeholder: "Email",
+                              class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= password_input f, :password, placeholder: "Password",
+                                     class: "form-control" %>
+  </div>
+  <%= submit "Sign in", class: "btn btn-primary" %>
+<% end %>
+```
+
+```
+# web/templates/layout/app.html.eex
+<li>
+  <%= link "Sign in", to: session_path(@conn, :new) %>
+</li>
+```
 
 ```
 # config.exs
