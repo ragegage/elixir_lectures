@@ -382,6 +382,8 @@ end
 
 ## refactor view
 
+display "log out" if user is logged in, display links otherwise
+
 Note:
 ```
 <ul class="nav nav-pills pull-right">
@@ -401,6 +403,82 @@ Note:
 
 ---
 
-## refactor
+## refactor auth functionality
 
 refactor out common auth functionality into a helper module
+
+this allows us to log users in when they sign up
+
+Note:
+```
+# web/auth/auth.ex
+defmodule LoginApp.Auth do
+  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
+  alias LoginApp.User
+  alias LoginApp.Repo
+  def login(conn, user) do
+    conn
+    |> Guardian.Plug.sign_in(user)
+  end
+  def login_by_email_and_pass(conn, email, given_pass) do
+    user = Repo.get_by(User, email: email)
+    cond do
+      user && checkpw(given_pass, user.password_hash) ->
+        {:ok, login(conn, user)}
+      user ->
+        {:error, :unauthorized, conn}
+      true ->
+        dummy_checkpw
+        {:error, :not_found, conn}
+    end
+  end
+  def logout(conn) do
+    Guardian.Plug.sign_out(conn)
+  end
+end
+```
+```
+# web/controllers/session_controller.ex
+defmodule LoginApp.SessionController do
+  use LoginApp.Web, :controller
+  plug :scrub_params, "session" when action in ~w(create)a
+  def new(conn, _) do
+    render conn, "new.html"
+  end
+  def create(conn, %{"session" => %{"email" => email,
+                                    "password" => password}}) do
+    case LoginApp.Auth.login_by_email_and_pass(conn, email,
+                                                 password) do
+      {:ok, conn} ->
+        conn
+        |> put_flash(:info, "You’re now signed in!")
+        |> redirect(to: page_path(conn, :index))
+      {:error, _reason, conn} ->
+        conn
+        |> put_flash(:error, "Invalid email/password combination")
+        |> render("new.html")
+     end
+  end
+  def delete(conn, _) do
+    conn
+    |> LoginApp.Auth.logout
+    |> put_flash(:info, "See you later!")
+    |> redirect(to: page_path(conn, :index))
+  end
+end
+```
+```
+# web/controllers/user_controller.ex
+def create(conn, %{"user" => user_params}) do
+  changeset = %User{} |> User.registration_changeset(user_params)
+  case Repo.insert(changeset) do
+    {:ok, user} ->
+      conn
+      |> SimpleAuth.Auth.login(user)
+      |> put_flash(:info, "#{user.name} created!")
+      |> redirect(to: user_path(conn, :show, user))
+    {:error, changeset} ->
+      render(conn, "new.html", changeset: changeset)
+  end
+end
+```
