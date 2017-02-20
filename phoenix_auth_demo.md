@@ -371,7 +371,7 @@ def delete(conn, _) do
   conn
   |> logout
   |> put_flash(:info, "See you later!")
-  |> redirect(to: page_path(conn, :index))
+  |> redirect(to: session_path(conn, :new))
 end
 defp logout(conn) do
   Guardian.Plug.sign_out(conn)
@@ -463,7 +463,7 @@ defmodule LoginApp.SessionController do
     conn
     |> LoginApp.Auth.logout
     |> put_flash(:info, "See you later!")
-    |> redirect(to: page_path(conn, :index))
+    |> redirect(to: session_path(conn, :index))
   end
 end
 ```
@@ -482,3 +482,50 @@ def create(conn, %{"user" => user_params}) do
   end
 end
 ```
+
+---
+
+## protecting pages
+
+make a new pipeline that requires auth; protect pages with that pipeline
++ implement guardian error handler
+
+Note:
+```
+# router.ex
+pipeline :login_required do
+  plug Guardian.Plug.EnsureAuthenticated,
+      handler: LoginApp.GuardianErrorHandler
+end
+scope "/", LoginApp do
+  pipe_through [:browser, :with_session] # adds session to normal browser pipeline
+
+  get "/", SessionController, :new
+
+  resources "/users", UserController, only: [:show, :new, :create]
+
+  resources "/sessions", SessionController, only: [:new, :create, :delete]
+
+  scope "/" do
+    pipe_through [:login_required]
+    
+    get "/chat", PageController, :index
+  end
+end
+```
+```
+# web/auth/guardian_error_handler.ex
+defmodule LoginApp.GuardianErrorHandler do
+  import LoginApp.Router.Helpers
+  def unauthenticated(conn, _params) do
+    conn
+    |> Phoenix.Controller.put_flash(:error,
+                       "You must be signed in to access that page.")
+    |> Phoenix.Controller.redirect(to: session_path(conn, :new))
+  end
+end
+```
+
+---
+
+source: [phoenix auth tutorial](https://medium.com/@andreichernykh/phoenix-simple-authentication-authorization-in-step-by-step-tutorial-form-dc93ea350153#.gpyst1sq3)
