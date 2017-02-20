@@ -128,13 +128,35 @@ end
 
 ## creating users
 
-add `comeonin` to list of dependencies; `mix deps.get` (like `bundle`)
+add `comeonin` to list of dependencies in `mix.exs`
++ `mix deps.get` (like `bundle`)
 
 create registration changeset in user model
 
 implement `:create` action in user controller
 
+**users are now creatable**
+
 Note:
+```
+# mix.exs
+def application do
+  [mod: {SimpleAuth, []},
+   applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext, :phoenix_ecto, :postgrex, :comeonin]]
+end
+defp deps do
+    [{:phoenix, "~> 1.2.0"},
+     {:phoenix_pubsub, "~> 1.0"},
+     {:phoenix_ecto, "~> 3.0"},
+     {:postgrex, ">= 0.0.0"},
+     {:phoenix_html, "~> 2.6"},
+     {:phoenix_live_reload, "~> 1.0", only: :dev},
+     {:gettext, "~> 0.11"},
+     {:cowboy, "~> 1.0"},
+     {:comeonin, "~> 2.5"}]
+end
+```
+
 ```
 def registration_changeset(struct, params) do
   struct
@@ -156,6 +178,22 @@ defp hash_password(changeset) do
 end
 ```
 
+```
+plug :scrub_params, "user" when action in [:create]
+
+def create(conn, %{"user" => user_params}) do
+  changeset = %User{} |> User.registration_changeset(user_params)
+  case Repo.insert(changeset) do
+    {:ok, user} ->
+      conn
+      |> put_flash(:info, "#{user.email} created!")
+      |> redirect(to: user_path(conn, :show, user))
+    {:error, changeset} ->
+      render(conn, "new.html", changeset: changeset)
+   end
+ end
+ ```
+
 ---
 
 ## creating sessions
@@ -169,6 +207,8 @@ find user by email, see if the pw matches, `Guardian.Plug.sign_in(user)`
 add a current_user helper module and a `:with_session` pipeline
 
 Note:
+`resources "/sessions", SessionController, only: [:new, :create, :delete]`
+
 ```
 # config.exs
 config :guardian, Guardian,
