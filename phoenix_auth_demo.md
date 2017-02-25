@@ -4,7 +4,10 @@ Note:
 mix phoenix.new login_app
 mix ecto.create
 
-remember, `iex -S mix` is equivalent to `rails c`
+remember:
++ `iex -S mix` is equivalent to `rails c`
++ once you've added `require IEx`, `IEx.pry` is equivalent to `debugger`
+
 ---
 
 + models
@@ -529,3 +532,41 @@ end
 ---
 
 source: [phoenix auth tutorial](https://medium.com/@andreichernykh/phoenix-simple-authentication-authorization-in-step-by-step-tutorial-form-dc93ea350153#.gpyst1sq3)
+
+---
+
+## authenticating chat
+
+assign window.userToken = a user token
+pass the token from `socket.js` to the server
+verify the token serverside when connecting to a socket
+
+Note:
+make a new plug to assign a user token:
+```
+# router.ex
+defp put_user_token(conn, _) do
+  if current_user = conn.assigns[:current_user] do
+    token = Phoenix.Token.sign(conn, "user socket", current_user.id)
+    assign(conn, :user_token, token)
+  else
+    conn
+  end
+end
+```
+assign window.userToken:
+```
+# web/templates/layout/app.html.eex
+<script>window.userToken = "<%= assigns[:user_token] %>";</script>
+```
+`socket.js` already passes the window's userToken to the server
+verify the token serverside:
+```
+# web/channels/user_socket.ex
+def connect(%{"token" => token}, socket) do
+  case Phoenix.Token.verify(socket, "user socket", token, max_age: 1209600) do
+    {:ok, user_id} -> {:ok, assign(socket, :user, user_id)}
+    {:error, _reason} -> :error
+  end
+end
+```
