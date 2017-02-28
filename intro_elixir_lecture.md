@@ -28,6 +28,8 @@ Note:
 Note:
 Erlang was WhatsApp's "secret sauce" - https://blog.whatsapp.com/170/ONE-MILLION%21?p=170
 
+helped bleacherreport scale ridiculously - https://cdn.ampproject.org/c/www.techworld.com/apps/how-elixir-helped-bleacher-report-handle-8x-more-traffic-3653957/?amp
+
 Erlang ("Ericsson language") is a component of Ericsson, which has about a 35 percent global market share in the wireless network infrastructure.
 
 Elixir was created by José Valim, a Rails core team member, in 2011.
