@@ -1,6 +1,8 @@
 # Phoenix
 
 "Rails for Elixir"
+http://rob.conery.io/2016/02/10/let-s-build-something-with-elixir/
+
 
 http://blog.carbonfive.com/2016/04/19/elixir-and-phoenix-the-future-of-web-apis-and-apps/
 

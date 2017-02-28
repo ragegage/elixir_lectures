@@ -32,7 +32,204 @@ you don't need to catch or handle exceptions, because every process is isolated
 
 state is most commonly kept in processes that loop infinitely, maintain state, and send and receive messages
 
+Agent & GenServer are both examples of this
+
+---
+
+Simple Counter state example:
+```
+defmodule SimpleCounter do
+  def go do
+    loop(0)
+  end
+
+  defp loop(n) do
+    receive do
+      {:click, from} ->
+        send(from, n + 1)
+        loop(n + 1)
+    end
+  end
+end
+```
+```
+iex > pid = spawn(&SimpleCounter.go/0)
+iex > send(pid, {:click, self})
+iex > receive do x -> x end
+```
+
+---
+
+Counter state example with API:
+```
+defmodule Counter do
+  # API methods
+  def new do
+    spawn fn -> loop(0) end
+  end
+
+  def set(pid, value) do
+    send(pid, {:set, value, self()})
+    receive do x -> x end
+  end
+
+  def click(pid) do
+    send(pid, {:click, self()})
+    receive do x -> x end
+  end
+
+  def get(pid) do
+    send(pid, {:get, self()})
+    receive do x -> x end
+  end
+
+  # Counter implementation
+  defp loop(n) do
+    receive do
+      {:click, from} ->
+        send(from, n + 1)
+        loop(n + 1)
+      {:get, from} ->
+        send(from, n)
+        loop(n)
+      {:set, value, from} ->
+        send(from, :ok)
+        loop(value)
+    end
+  end
+end
+```
+```
+iex > c = Counter.new
+iex > Counter.click(c)
+iex > Counter.get(c)
+iex > Counter.set(c, 42)
+iex > Counter.get(c)
+iex > c2 = Counter.new
+iex > Counter.get(c2)
+```
+
+---
+
+DRYer state management code:
+```
+defmodule GenCounter do
+  # API
+  def new do
+    spawn(fn -> loop(0) end)
+  end
+
+  def click(pid) do
+    make_call(pid, :click)
+  end
+
+  def get(pid) do
+    make_call(pid, :get)
+  end
+
+  def set(pid, new_value) do
+    make_call(pid, {:set, new_value})
+  end
+
+  # message handlers
+  # handle_msg(message, current_state) -> {reply, new_state}
+  defp handle_msg(:click, n), do: {n + 1, n + 1}
+  defp handle_msg(:get, n), do: {n, n}
+  defp handle_msg({:set, new_value}, _n), do: {:ok, new_value}
+
+  # main state loop
+  defp loop(state) do
+    receive do
+      {from, msg} ->
+        {reply, new_state} = handle_msg(msg, state)
+        send(from, reply)
+        loop(new_state)
+    end
+  end
+
+  # call helper
+  defp make_call(pid, msg) do
+    send(pid, {self(), msg})
+    receive do x -> x end
+  end
+end
+```
+
+---
+
+GenServer refactor:
+```
+defmodule CounterServer do
+  use GenServer
+
+  # API
+  def new do
+    GenServer.start_link(__MODULE__, 0)
+  end
+
+  def click(pid) do
+    GenServer.call(pid, :click)
+  end
+
+  def set(pid, new_value) do
+    GenServer.call(pid, {:set, new_value})
+  end
+
+  def get(pid) do
+    GenServer.call(pid, :get)
+  end
+
+  # GenServer callbacks
+
+  # init(arguments) -> {:ok, state}
+  # see http://elixir-lang.org/docs/v1.0/elixir/GenServer.html
+  def init(n) do
+    {:ok, n}
+  end
+
+  # handle_call(message, from_pid, state) -> {:reply, response, new_state}
+  # see http://elixir-lang.org/docs/v1.0/elixir/GenServer.html
+  def handle_call(:click, _from, n) do
+    {:reply, n + 1, n + 1}
+  end
+  def handle_call(:get, _from, n) do
+    {:reply, n, n}
+  end
+  def handle_call({:set, new_value}, _from, _n) do
+    {:reply, :ok, new_value}
+  end
+end
+```
+
+---
+
+Agent refactor:
+```
+defmodule CounterAgent do
+  def new do
+    Agent.start_link(fn -> 0 end)
+  end
+
+  def click(pid) do
+    Agent.get_and_update(pid, fn(n) -> {n + 1, n + 1} end)
+  end
+
+  def set(pid, new_value) do
+    Agent.update(pid, fn(_n) -> new_value end)
+  end
+
+  def get(pid) do
+    Agent.get(pid, fn(n) -> n end)
+  end
+end
+```
+
 Note:
+source for this and the previous few slides: http://dantswain.herokuapp.com/blog/2015/01/06/storing-state-in-elixir-with-processes/
+
+---
+
+
 kv.exs demo:
 ```
 {:ok, pid} = KV.start_link
@@ -93,9 +290,9 @@ you can set `MIX_ENV=prod mix compile` to set the environment
 
 Processes:
 + Agent (simple wrappers around state)
-+ GenServer (generic servers / processes)
-+ GenEvent (generic event managers that allow publish events)
 + Task (async computation processes)
++ GenServer (generic servers / processes -> Agent + Task)
++ GenEvent (generic event managers that allow publish events)
 
 all use `send`, `receive`, `spawn`, `link`, &c.
 
@@ -160,6 +357,8 @@ could create enough to fill up system memory)
 ---
 
 GenServers
+
+a GenServer is a loop that handles one request per iteration passing along an updated state (https://elixirschool.com/lessons/advanced/otp-concurrency/)
 
 accepts two types or requests:
 + calls -> synchronous, server must repond

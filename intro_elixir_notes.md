@@ -80,6 +80,9 @@ lists are stored in memory as linked lists; prepending elements is O(1) but find
 tuples are defined using curly brackets (e.g., `tuple = {1, :test}`; you can index into them using elem: `elem tuple, 0 # 1`; you can change the contents of a tuple using `put_elem tuple, pos, element` (e.g., `put elem tuple, 1, 2 # {1, 2}`). because data types are immutable in elixir, the original tuple isn't changed.
 tuples are stored contiguously in memory; finding the length is O(1) but changing elements is O(n) because it requires copying the tuple's entire contents to a new tuple.
 
+Note:
+"tuple" means a finite ordered list of elements
+
 ---
 
 in general, `size` functions take constant time and `length` functions take linear time.
