@@ -34,6 +34,16 @@ state is most commonly kept in processes that loop infinitely, maintain state, a
 
 Agent & GenServer are both examples of this
 
+can define a struct that holds state information:
+`defstruct [id: nil, items: [], key: nil]`
+
+create that struct using input like so:
+`struct(%AppName.ProcessName{}, map_of_input_values)`
+
+and edit like so:
+`%{struct_name | items: List.insert_at(struct_name.items, -1, item)}`
+(this updates the `items` key and leaves the rest unchanged)
+
 ---
 
 Simple Counter state example:
@@ -269,7 +279,7 @@ ExUnit - unit testing framework the ships with Elixir
 `mix new project_name` or `mix new modulename --module ProjectName`
 `cd kv; mix compile` # Generated kv app
 `iex -S mix` opens an iex session inside the app
-`mix text` runs all tests inside the `test` folder
+`mix test` runs all tests inside the `test` folder
 + passed tests are represented by a `.`
 + failed tests output:
   + the location where the test was defined (e.g., `test/kv_test.exs:5`)
@@ -535,3 +545,17 @@ $ mix new kv_server --module KVServer --sup
 ```
 
 ---
+
+Errata
+
+`Process.whereis(:process_name)` returns pid of that named process
+
+the Erlang VM can only support 1,048,576 atoms
+
+there is a limit on the number of current alive (running) processes: 32,768
+
+---
+
+Sources:
+http://rob.conery.io/2016/02/17/red4-store-part-3/
+(and the other blog posts)
