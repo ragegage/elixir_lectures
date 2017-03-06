@@ -21,6 +21,14 @@ Erlang was WhatsApp's "secret sauce" - https://blog.whatsapp.com/170/ONE-MILLION
 
 ---
 
++ scalable: can adapt to changes in load or available resources
++ distributed: describes how systems are clustered and interact with each other
++ fault tolerance: continues to operate predictably despite failures
++ soft real-time: managing latency and maintaining real-time-ish responses
++ high availability: minimize or eliminate downtime
+
+---
+
 erlang is:
 compiled
 immutable state
@@ -389,6 +397,10 @@ you can pipe the results of a function directly into another function using `|>`
 ```
 1..100_000 |> Enum.map(&(&1 * 3)) |> Enum.filter(odd?) |> Enum.sum
 ```
+
+Note:
+example rearrangement of argument order:
+`(&(List.update_at(array, second_coord, fn(y) -> &1 end))).()`
 
 ---
 

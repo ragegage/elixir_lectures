@@ -1,6 +1,17 @@
+OTP
+
++ erlang
++ tools & libraries
++ system design principles
+
+---
+
 Processes
 
-isolated from each other, run concurrent to each other, communicate via message passing
++ isolated from each other 
+  + each process has its own memory heap and garbage collector
++ run concurrent to each other
++ communicate via message passing
 
 create a new process using `spawn/1`:
 ```
@@ -67,6 +78,11 @@ iex > pid = spawn(&SimpleCounter.go/0)
 iex > send(pid, {:click, self})
 iex > receive do x -> x end
 ```
+
+Note:
+spawn syntax:
+`spawn(fn -> Runner.move() end)`
+`spawn(Runner, :move, [])`
 
 ---
 
@@ -279,6 +295,7 @@ ExUnit - unit testing framework the ships with Elixir
 `mix new project_name` or `mix new modulename --module ProjectName`
 `cd kv; mix compile` # Generated kv app
 `iex -S mix` opens an iex session inside the app
++ `r ModuleName` recompiles that module inside iex
 `mix test` runs all tests inside the `test` folder
 + passed tests are represented by a `.`
 + failed tests output:
