@@ -67,7 +67,23 @@ Define a module `ChatServer.Message` that contains a struct definition. The
 struct defined for this module should have a `content` property and a
 `username` property.
 
-Now, if a user passes content to the chat server, create a new Message struct with the `content` property set to that content.
+Now, if a user passes content to the chat server, create a new Message struct
+with the `content` property set to that content.
+
+If, on the other hand, a user passes in a Map with a `content` property and a
+`username` property, then create a new Message struct using those passed-in
+properties.
+
+Test your code by running:
+```
+pid = spawn(fn -> ChatServer.loop() end)
+send(pid, {:add_msg, "hello world"})
+send(pid, {:get, self()})
+flush() # => should return [%ChatServer.Message{content: "hello world", username: "anon"}]
+send(pid, {:add_msg, %{content: "hello world", username: "gage"}})
+send(pid, {:get, self()})
+flush() # => should return [%ChatServer.Message{content: "hello world", username: "anon"}, %ChatServer.Message{content: "hello world", username: "gage"}]
+```
 
 ## 4. Create chat server Supervisor
 
