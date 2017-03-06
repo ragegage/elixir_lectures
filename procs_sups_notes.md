@@ -276,12 +276,6 @@ Agent.get(pid, fn map -> Map.get(map, :hello) end)
 
 ---
 
-next steps to learn:
-
-[mix and building a real app](http://elixir-lang.org/getting-started/mix-otp/introduction-to-mix.html)
-
----
-
 OTP - Open Telecom Platform (a set of libraries that ship with Erlang -
 supervision trees, event managers, &c.)
 
