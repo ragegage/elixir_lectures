@@ -89,9 +89,34 @@ flush() # => should return [%ChatServer.Message{content: "hello world", username
 
 ### 4.1 Refactor chat server into a GenServer
 
-This will allow this chat server to fit into a supervision tree.
+#### 4.1.1 `use GenServer`
 
-`use GenServer`
+Once we have refactored the chat server to implement the GenServer behavior, we
+will be able to fit it into a supervision tree very easily.
+
+First, add `use GenServer` to the top of the module's definition. This allows
+GenServer methods to be used throughout this module. Write a `start_link`
+function that returns `GenServer.start_link(__MODULE__, :ok, [])`.
+
+Test your code:
+```
+ChatServer.start_link # => {:ok, #PID<0.123.0>}
+# this pid is your reference to that chat server
+```
+
+#### 4.1.2 Client API
+
+Next, let's write some Client functions. These functions are the way that users
+and other processes will interact with this module. Write:
++ A `get/1` function that receives `pid` and returns `GenServer.call(pid,
+{:get})`
++ A `create/2` function that receives `pid` and `content` and returns
+`GenServer.cast(pid, {:create, content})`
+
+#### 4.1.3 Server callbacks
+
+Now that we have an Client API for this chat server, let's build out the server
+side.
 
 `def start_link`
 
