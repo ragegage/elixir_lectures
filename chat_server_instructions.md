@@ -47,7 +47,7 @@ flush() # => should return []
 ### 2.2 Add the ability to store chat content
 
 Add another message matching clause to your `loop` function. If the message
-matches the format `{:add_msg, msg}`, then continue looping with that message
+matches the format `{:add_msg, msg}`, then continue looping with that content
 added to your state.
 
 Test your code by running:
@@ -63,7 +63,11 @@ flush() # => should return ["hello world", "hello again"]
 
 ## 3. Add Message struct
 
+Define a module `ChatServer.Message` that contains a struct definition. The
+struct defined for this module should have a `content` property and a
+`username` property.
 
+Now, if a user passes content to the chat server, create a new Message struct with the `content` property set to that content.
 
 ## 4. Create chat server Supervisor
 
