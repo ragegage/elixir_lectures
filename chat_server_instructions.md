@@ -116,11 +116,15 @@ and other processes will interact with this module. Write:
 #### 4.1.3 Server callbacks
 
 Now that we have an Client API for this chat server, let's build out the server
-side.
+side. Server functions include:
++ `init/1`, which receives the second argument from the call to
+`GenServer.start_link`
++ `handle_call/3`, which receives the request, who it's from, and the current
+state
++ `handle_cast/2`, which receives the request and the state, and isn't expected
+to reply
 
-`def start_link`
 
-`def handle_call` & `def handle_cast`
 
 ### 4.2 Create ChatServer.Supervisor
 
