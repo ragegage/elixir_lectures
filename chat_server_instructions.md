@@ -47,16 +47,16 @@ flush() # => should return []
 ### 2.2 Add the ability to store chat content
 
 Add another message matching clause to your `loop` function. If the message
-matches the format `{:add_msg, msg}`, then continue looping with that content
+matches the format `{:create, msg}`, then continue looping with that content
 added to your state.
 
 Test your code by running:
 ```
 pid = spawn(fn -> ChatServer.loop() end)
-send(pid, {:add_msg, "hello world"})
+send(pid, {:create, "hello world"})
 send(pid, {:get, self()})
 flush() # => should return ["hello world"]
-send(pid, {:add_msg, "hello again"})
+send(pid, {:create, "hello again"})
 send(pid, {:get, self()})
 flush() # => should return ["hello world", "hello again"]
 ```
@@ -77,17 +77,47 @@ properties.
 Test your code by running:
 ```
 pid = spawn(fn -> ChatServer.loop() end)
-send(pid, {:add_msg, "hello world"})
+send(pid, {:create, "hello world"})
 send(pid, {:get, self()})
 flush() # => should return [%ChatServer.Message{content: "hello world", username: "anon"}]
-send(pid, {:add_msg, %{content: "hello world", username: "gage"}})
+send(pid, {:create, %{content: "hello world", username: "gage"}})
 send(pid, {:get, self()})
 flush() # => should return [%ChatServer.Message{content: "hello world", username: "anon"}, %ChatServer.Message{content: "hello world", username: "gage"}]
 ```
 
 ## 4. Create chat server Supervisor
 
+### 4.1 Refactor chat server into a GenServer
 
+This will allow this chat server to fit into a supervision tree.
+
+`use GenServer`
+
+`def start_link`
+
+`def handle_call` & `def handle_cast`
+
+### 4.2 Create ChatServer.Supervisor
+
+Create a new file, `chat_supervisor.ex`. It should contain the following code:
+```
+defmodule ChatServer.Supervisor do
+  # allows this module to use all of the Supervisor module's functions
+  use Supervisor
+
+  def start_link do
+    Supervisor.start_link(__MODULE__, :ok)
+  end
+
+  def init(:ok) do
+    children = [
+      worker(ChatServer, [ChatServer])
+    ]
+
+    supervise(children, strategy: :one_for_one)
+  end
+end
+```
 
 ## 5. Create multiple chat rooms
 
