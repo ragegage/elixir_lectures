@@ -56,5 +56,16 @@ pid = spawn(fn -> ChatServer.loop() end)
 send(pid, {:add_msg, "hello world"})
 send(pid, {:get, self()})
 flush() # => should return ["hello world"]
+send(pid, {:add_msg, "hello again"})
+send(pid, {:get, self()})
+flush() # => should return ["hello world", "hello again"]
 ```
+
+## 3. Add Message struct
+
+
+
+## 4. Create chat server Supervisor
+
+## 5. Create multiple chat rooms
 
