@@ -157,5 +157,13 @@ defmodule ChatServer.Supervisor do
 end
 ```
 
+Test your code using the following:
+```
+{:ok, pid} = ChatServer.Supervisor.start_link
+ChatServer.get(ChatServer) # => []
+ChatServer.create(ChatServer, "hello world")
+ChatServer.get(ChatServer) # => [%ChatServer.Message{content: "chach", username: "anon"}]
+```
+
 ## 5. Create multiple chat rooms
 
