@@ -26,3 +26,5 @@ method definition shorthand: `def go(num), do: IO.puts(num)`
 
 processes tab in `:observer` will list the name and current function of each
 process
+
+[solutions](./intro_elixir_solutions.md)
