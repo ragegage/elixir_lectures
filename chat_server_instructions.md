@@ -225,3 +225,8 @@ ChatServer.create "foo", "foobar"
 ChatServer.get("foo") # => [%ChatServer.Message{content: "foobar", username: "anon"}]
 ChatServer.get("bar") # => []
 ```
+
+## 6. Celebrate
+
+We've now created a chat server that can store and share chat content across
+each of its multiple rooms.
