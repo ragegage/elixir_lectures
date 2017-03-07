@@ -143,7 +143,7 @@ defmodule ChatServer.Supervisor do
   use Supervisor
 
   def start_link do
-    Supervisor.start_link(__MODULE__, :ok)
+    Supervisor.start_link(__MODULE__, [], name: :chat_supervisor)
   end
 
   def init(:ok) do
@@ -193,3 +193,35 @@ ChatServer.get() # []
 
 Now let's set up a way for our chat server to hold multiple chat rooms.
 
+### 5.1 Update the Supervisor
+
+Start by adding a `start_room/1` function to the Supervisor module. This
+function will receive a name as an argument, and return
+`Supervisor.start_child(:chat_supervisor, [name])`.
+
+Change the supervision strategy from `:one_for_one` to `:simple_one_for_one` -
+this strategy is better equipped to handle the dynamic creation of child
+processes.
+
+Add a line to `init/1` in the supervisor module with
+`Registry.start_link(:unique, :chat_room)`. This starts a registry for the chat
+server processes, as we will be creating a new process for each chat room.
+
+### 5.2 Update the ChatServer
+
+Write a function `via_tuple/1` that takes an argument `room_name` and returns
+`{:via, Registry, {:chat_room, room_name}}` - an instruction to look up this
+process by its room name in the `:chat_room` registry.
+
+Next, add a `room_name` argument to each client-side function and replace each
+instance of `:chat_room` with a call to `via_tuple(room_name)`.
+
+Test your code with the following:
+```
+ChatServer.Supervisor.start_link
+ChatServer.Supervisor.start_room "foo"
+ChatServer.Supervisor.start_room "bar"
+ChatServer.create "foo", "foobar"
+ChatServer.get("foo") # => [%ChatServer.Message{content: "foobar", username: "anon"}]
+ChatServer.get("bar") # => []
+```
