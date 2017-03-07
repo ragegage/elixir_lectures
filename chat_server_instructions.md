@@ -159,11 +159,29 @@ end
 
 Test your code using the following:
 ```
-{:ok, pid} = ChatServer.Supervisor.start_link
+ChatServer.Supervisor.start_link
 ChatServer.get(ChatServer) # => []
 ChatServer.create(ChatServer, "hello world")
 ChatServer.get(ChatServer) # => [%ChatServer.Message{content: "chach", username: "anon"}]
 ```
 
+Bonus: Run `:sys.trace(ChatServer, true)` to get a debug trace of the
+ChatServer process.
+
+### 4.3 Testing process crashes
+
+The main thing we would hope to get out of supervising processes is that a
+process crash shouldn't crash the entire program. We can find processes using
+`Process.whereis(process_name)` and kill them using `Process.exit(pid, :kill)`:
+```
+ChatServer.Supervisor.start_link
+ChatServer.get(ChatServer) # => []
+ChatServer.create(ChatServer, "hello world")
+pid = Process.whereis(ChatServer)
+Process.exit(pid, :kill) 
+ChatServer.get(ChatServer) # []
+```
+
 ## 5. Create multiple chat rooms
 
+Now let's set up a way for our chat server to hold multiple chat rooms.
