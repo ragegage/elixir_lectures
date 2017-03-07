@@ -172,7 +172,9 @@ ChatServer process.
 
 The main thing we would hope to get out of supervising processes is that a
 process crash shouldn't crash the entire program. We can find processes using
-`Process.whereis(process_name)` and kill them using `Process.exit(pid, :kill)`:
+`Process.whereis(process_name)` and kill them using `Process.exit(pid, :kill)`,
+and in fact the entire program doesn't die:
+
 ```
 ChatServer.Supervisor.start_link
 ChatServer.get(ChatServer) # => []
