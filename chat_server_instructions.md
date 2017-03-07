@@ -115,7 +115,7 @@ and other processes will interact with this module. Write:
 
 #### 4.1.3 Server callbacks
 
-Now that we have an Client API for this chat server, let's build out the server
+Now that we have an Client API for this chat server, build out the server
 side. Server functions include:
 + `init/1`, which receives the second argument from the call to
 `GenServer.start_link`
@@ -124,7 +124,16 @@ state
 + `handle_cast/2`, which receives the request and the state, and isn't expected
 to reply
 
+The content of these functions will be largely the same as their counterparts
+in the previous iteration.
 
+Test your code using the following:
+```
+{:ok, pid} = ChatServer.start_link
+ChatServer.get(pid) # => []
+ChatServer.create(pid, "hello world")
+ChatServer.get(pid) # => [%ChatServer.Message{content: "hello world", username: "anon"}]
+```
 
 ### 4.2 Create ChatServer.Supervisor
 
