@@ -96,7 +96,7 @@ will be able to fit it into a supervision tree very easily.
 
 First, add `use GenServer` to the top of the module's definition. This allows
 GenServer methods to be used throughout this module. Write a `start_link`
-function that returns `GenServer.start_link(__MODULE__, :ok, [])`.
+function that returns `GenServer.start_link(__MODULE__, :ok, name: :chat_room)`.
 
 Test your code:
 ```
@@ -108,10 +108,9 @@ ChatServer.start_link # => {:ok, #PID<0.123.0>}
 
 Next, let's write some Client functions. These functions are the way that users
 and other processes will interact with this module. Write:
-+ A `get/1` function that receives `pid` and returns `GenServer.call(pid,
-{:get})`
-+ A `create/2` function that receives `pid` and `content` and returns
-`GenServer.cast(pid, {:create, content})`
++ A `get/0` function that returns `GenServer.call(:chat_room, {:get})`
++ A `create/1` function that receives `content` and returns
+`GenServer.cast(:chat_room, {:create, content})`
 
 #### 4.1.3 Server callbacks
 
@@ -129,10 +128,10 @@ in the previous iteration.
 
 Test your code using the following:
 ```
-{:ok, pid} = ChatServer.start_link
-ChatServer.get(pid) # => []
-ChatServer.create(pid, "hello world")
-ChatServer.get(pid) # => [%ChatServer.Message{content: "hello world", username: "anon"}]
+{:ok, pid} = ChatServer.start_link(:ok)
+ChatServer.get() # => []
+ChatServer.create("hello world")
+ChatServer.get() # => [%ChatServer.Message{content: "hello world", username: "anon"}]
 ```
 
 ### 4.2 Create ChatServer.Supervisor
@@ -148,8 +147,11 @@ defmodule ChatServer.Supervisor do
   end
 
   def init(:ok) do
+    # the child processes of this supervisor are one ChatServer
+      # the second argument is a list of arguments that should get passed to
+      # that module's start_link function
     children = [
-      worker(ChatServer, [ChatServer])
+      worker(ChatServer, [])
     ]
 
     supervise(children, strategy: :one_for_one)
@@ -160,9 +162,9 @@ end
 Test your code using the following:
 ```
 ChatServer.Supervisor.start_link
-ChatServer.get(ChatServer) # => []
-ChatServer.create(ChatServer, "hello world")
-ChatServer.get(ChatServer) # => [%ChatServer.Message{content: "chach", username: "anon"}]
+ChatServer.get() # => []
+ChatServer.create(, "hello world")
+ChatServer.get() # => [%ChatServer.Message{content: "chach", username: "anon"}]
 ```
 
 Bonus: Run `:sys.trace(ChatServer, true)` to get a debug trace of the
@@ -177,13 +179,17 @@ and in fact the entire program doesn't die:
 
 ```
 ChatServer.Supervisor.start_link
-ChatServer.get(ChatServer) # => []
-ChatServer.create(ChatServer, "hello world")
-pid = Process.whereis(ChatServer)
-Process.exit(pid, :kill) 
-ChatServer.get(ChatServer) # []
+ChatServer.get() # => []
+ChatServer.create("hello world")
+Process.whereis(:chat_room)
+Process.whereis(:chat_room) |> Process.exit(:kill)
+Process.whereis(:chat_room)
+ChatServer.get() # []
 ```
+
+
 
 ## 5. Create multiple chat rooms
 
 Now let's set up a way for our chat server to hold multiple chat rooms.
+
