@@ -1,30 +1,101 @@
-Range
+# Range
 
-FizzBuzz
+defmodule MyRange do
+  def create(s, e) when e >= s do
+    (s..e)
+    |> Enum.to_list
+  end
+  def create(_, _) do
+    "invalid start and endpoints"
+  end
+end
 
-Sum list elements
+# FizzBuzz
 
-my_reduce
+defmodule FizzBuzz do
+  def fizz_buzz(list) do
+    Enum.map(list, fn el -> whichfizz(rem(el, 3), rem(el, 5), el)  end)
+  end
 
-my_select
+  defp whichfizz(0, 0, _), do: "FizzBuzz"
+  defp whichfizz(0, _, _), do: "Fizz"
+  defp whichfizz(_, 0, _), do: "Buzz"
+  defp whichfizz(_, _, n), do: n
+end
 
-my_any
+defmodule MyList do
+# Sum list elements
+  def sum(list) do
+    list
+    |> Enum.reduce(fn (el, acc) -> acc + el end)
+  end
 
-my_map
+# my_reduce
+  def my_reduce([h | t], acc, func) do
+    my_reduce(t, func.(h, acc), func)
+  end
+  def my_reduce([], acc, _), do: acc
 
-my_rotate
+# my_select
+  def my_select(list, func) do
+    my_select(list, func, [])
+  end
+  defp my_select([h | t], func, new_list) do
+    if func.(h) do
+      my_select(t, func, new_list ++ [h])
+    else 
+      my_select(t, func, new_list)
+    end
+  end
+  defp my_select([], _, new_list), do: new_list
 
-Remove duplicates from list
+# my_any?
+  def my_any?([h | t], func) do
+    if func.(h) do
+      true
+    else 
+      my_any?(t, func)
+    end
+  end
+  def my_any?([], _), do: false
 
-Substrings
+# my_map
+  def my_map(list, func) do
+    my_map(list, func, [])
+  end
+  defp my_map([h | t], func, new_list) do
+    my_map(t, func, new_list ++ [func.(h)])
+  end
+  defp my_map([], _, new_list), do: new_list
 
-my_flatten
+# my_rotate
+  def my_rotate([h | t], amount) when amount > 0 do
+    my_rotate(t ++ [h], amount - 1)
+  end
+  def my_rotate(list, amount) when amount < 0 do
+    my_rotate(Enum.take(list, -1) ++ Enum.drop(list, -1), amount + 1)
+  end
+  def my_rotate(list, amount) when amount == 0 do
+    list
+  end
 
-my_zip
+# Remove duplicates from list
+  def my_uniq(list) do
+    list 
+    |> MapSet.new
+    |> Enum.to_list
+  end
+end
 
-Binary Search
+# Substrings
 
-Mergesort
+# my_flatten
+
+# my_zip
+
+# Binary Search
+
+# Mergesort
 
 # Curry:
 defmodule Curry do
