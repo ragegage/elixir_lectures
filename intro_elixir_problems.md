@@ -38,7 +38,17 @@ MyList.my_map([1,2,3,4], fn el -> el * el end)
 # => [1, 4, 9, 16]
 ```
 1. my_rotate
+```
+MyList.my_rotate([1,2,3,4], -3)
+# => [2, 3, 4, 1]
+MyList.my_rotate([1,2,3,4], 3) 
+# => [4, 1, 2, 3]
+```
 1. Remove duplicates from list
+```
+MyList.my_uniq([1,2,3,4,3,2,1,2,3,4,3,2,1])
+# => [1, 2, 3, 4]
+```
 1. Substrings
 1. my_flatten
 1. my_zip

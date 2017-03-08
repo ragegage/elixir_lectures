@@ -85,17 +85,37 @@ defmodule MyList do
     |> MapSet.new
     |> Enum.to_list
   end
+
+# my_flatten
+  def my_flatten(list) do
+    
+  end
+
+# my_zip
+  def my_zip(list1, list2) do
+    
+  end
 end
 
 # Substrings
-
-# my_flatten
-
-# my_zip
+defmodule Substrings do
+  def substrings(string) do
+  end
+end
 
 # Binary Search
+defmodule BSearch do
+  def go(list) do
+    
+  end
+end
 
 # Mergesort
+defmodule Mergesort do
+  def sort(list) do
+    
+  end
+end
 
 # Curry:
 defmodule Curry do
