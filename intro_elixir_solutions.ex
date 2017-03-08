@@ -87,19 +87,30 @@ defmodule MyList do
   end
 
 # my_flatten
-  def my_flatten(list) do
-    
+  def my_flatten(list), do: my_flatten(list, [])
+  defp my_flatten([h | t], next) when is_list(h) do
+    my_flatten(t, next ++ my_flatten(h, []))
   end
+  defp my_flatten([h | t], next) do
+    my_flatten(t, next ++ [h])
+  end
+  defp my_flatten([], next), do: next
 
 # my_zip
-  def my_zip(list1, list2) do
-    
+  def my_zip(list1, list2), do: my_zip(list1, list2, [])
+  defp my_zip([h1 | t1], [h2 | t2], result) do
+    my_zip(t1, t2, result ++ [[h1, h2]])    
   end
+  defp my_zip([h1 | t1], [], result) do
+    my_zip(t1, [], result ++ [[h1, nil]])    
+  end
+  defp my_zip([], _, result), do: result
 end
 
 # Substrings
 defmodule Substrings do
   def substrings(string) do
+    
   end
 end
 
