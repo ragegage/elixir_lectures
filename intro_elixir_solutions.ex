@@ -109,8 +109,20 @@ end
 
 # Substrings
 defmodule Substrings do
-  def substrings(string) do
-    
+  def substrings string do
+    length = String.length string
+    walk_up(string, 0, length, [""])
+  end
+  defp walk_up(_, _, len, list) when len == 0, do: list
+  defp walk_up(string, idx, len, list) when idx <= len do
+    walk_up(string, idx + 1, len, [String.slice(string, 0, idx)] ++ list)
+  end
+  defp walk_up(string, _, len, list) do
+    new_string = String.split(string, "") 
+      |> Enum.drop(1)
+      |> IO.inspect
+      |> Enum.join
+    walk_up(new_string, 0, len - 1, list)
   end
 end
 
