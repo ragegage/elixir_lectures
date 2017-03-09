@@ -95,7 +95,7 @@ Once we have refactored the chat server to implement the GenServer behavior, we
 will be able to fit it into a supervision tree very easily.
 
 First, add `use GenServer` to the top of the module's definition. This allows
-GenServer methods to be used throughout this module. Write a `start_link`
+GenServer methods to be used throughout this module. Write a `start_link/0`
 function that returns `GenServer.start_link(__MODULE__, :ok, name: :chat_room)`.
 
 Test your code:
