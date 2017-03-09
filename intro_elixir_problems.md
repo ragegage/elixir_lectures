@@ -10,7 +10,7 @@ MyRange.create(4, 9)
 FizzBuzz.fizz_buzz((1..20))
 # => [1, 2, "Fizz", 4, "Buzz", "Fizz", 7, 8, "Fizz", "Buzz", 11, "Fizz", 13, 14, "FizzBuzz", 16, 17, "Fizz", 19, "Buzz"]
 ```
-1. Sum list 
+1. Sum list
 ```
 MyList.sum([1,2,3,4,5])
 # => 15
@@ -41,7 +41,7 @@ MyList.my_map([1,2,3,4], fn el -> el * el end)
 ```
 MyList.my_rotate([1,2,3,4], -3)
 # => [2, 3, 4, 1]
-MyList.my_rotate([1,2,3,4], 3) 
+MyList.my_rotate([1,2,3,4], 3)
 # => [4, 1, 2, 3]
 ```
 1. Remove duplicates from list
@@ -60,8 +60,11 @@ MyList.my_flatten([1,[1,[1,2,3],2,3],2,3], [])
 MyList.my_zip([1,2,3],[4,5,6])
 # => [[1, 4], [2, 5], [3, 6]]
 ```
-1. Binary Search
 1. Mergesort
+```
+Mergesort.sort [1,4,23,6,2,5,6,3]
+# => [1, 2, 3, 4, 5, 6, 6, 23]
+```
 1. Curry
 
 Remember:
@@ -75,4 +78,4 @@ method definition shorthand: `def go(num), do: IO.puts(num)`
 processes tab in `:observer` will list the name and current function of each
 process
 
-[solutions](./intro_elixir_solutions.md)
+[solutions](./intro_elixir_solutions.ex)

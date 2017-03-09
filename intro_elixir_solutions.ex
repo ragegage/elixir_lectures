@@ -43,7 +43,7 @@ defmodule MyList do
   defp my_select([h | t], func, new_list) do
     if func.(h) do
       my_select(t, func, new_list ++ [h])
-    else 
+    else
       my_select(t, func, new_list)
     end
   end
@@ -53,7 +53,7 @@ defmodule MyList do
   def my_any?([h | t], func) do
     if func.(h) do
       true
-    else 
+    else
       my_any?(t, func)
     end
   end
@@ -81,7 +81,7 @@ defmodule MyList do
 
 # Remove duplicates from list
   def my_uniq(list) do
-    list 
+    list
     |> MapSet.new
     |> Enum.to_list
   end
@@ -99,17 +99,17 @@ defmodule MyList do
 # my_zip
   def my_zip(list1, list2), do: my_zip(list1, list2, [])
   defp my_zip([h1 | t1], [h2 | t2], result) do
-    my_zip(t1, t2, result ++ [[h1, h2]])    
+    my_zip(t1, t2, result ++ [[h1, h2]])
   end
   defp my_zip([h1 | t1], [], result) do
-    my_zip(t1, [], result ++ [[h1, nil]])    
+    my_zip(t1, [], result ++ [[h1, nil]])
   end
   defp my_zip([], _, result), do: result
 end
 
 # Substrings
 defmodule Substrings do
-  def substrings string do
+  def substrings(string) do
     length = String.length string
     walk_up(string, 0, length, [""])
   end
@@ -126,18 +126,25 @@ defmodule Substrings do
   end
 end
 
-# Binary Search
-defmodule BSearch do
-  def go(list) do
-    
-  end
-end
-
 # Mergesort
 defmodule Mergesort do
-  def sort(list) do
-    
+  def sort(list) when length(list) < 2 do
+    list
   end
+  def sort(list) do
+    half = length(list)/2 |> trunc
+    merge(sort(Enum.take(list, half)), sort(Enum.drop(list, half)), [])
+  end
+
+  defp merge([h1 | t1], [h2 | t2], merged) when h1 <= h2 do
+    merge(t1, [h2 | t2], merged ++ [h1])
+  end
+  defp merge([h1 | t1], [h2 | t2], merged) when h2 < h1 do
+    merge([h1 | t1], t2, merged ++ [h2])
+  end
+  defp merge([], list2, merged), do: merged ++ list2
+  defp merge(list1, [], merged), do: merged ++ list1
+  defp merge([], [], merged), do: merged
 end
 
 # Curry:
@@ -156,6 +163,4 @@ defmodule Curry do
     fn arg -> curry(fun, arity - 1, [arg | arguments]) end
   end
 
-
 end
-
