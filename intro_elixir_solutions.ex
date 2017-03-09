@@ -151,5 +151,4 @@ defmodule Curry do
     fn arg -> curry(fun, arity - 1, [arg | arguments]) end
   end
 
-
 end
