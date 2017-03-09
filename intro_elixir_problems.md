@@ -50,6 +50,10 @@ MyList.my_uniq([1,2,3,4,3,2,1,2,3,4,3,2,1])
 # => [1, 2, 3, 4]
 ```
 1. Substrings
+```
+Substrings.substrings "abcd"
+# => ["d", "cd", "c", "bcd", "bc", "b", "abcd", "abc", "ab", "a", ""]
+```
 1. my_flatten
 ```
 MyList.my_flatten([1,[1,[1,2,3],2,3],2,3], [])

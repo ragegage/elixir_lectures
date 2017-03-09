@@ -111,7 +111,7 @@ end
 defmodule Substrings do
   def substrings(string) do
     length = String.length string
-    walk_up(string, 0, length, [""])
+    walk_up(string, 1, length, [""])
   end
   defp walk_up(_, _, len, list) when len == 0, do: list
   defp walk_up(string, idx, len, list) when idx <= len do
@@ -120,9 +120,9 @@ defmodule Substrings do
   defp walk_up(string, _, len, list) do
     new_string = String.split(string, "") 
       |> Enum.drop(1)
-      |> IO.inspect
+      |> Enum.drop(-1)
       |> Enum.join
-    walk_up(new_string, 0, len - 1, list)
+    walk_up(new_string, 1, len - 1, list)
   end
 end
 
