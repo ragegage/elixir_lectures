@@ -5,71 +5,86 @@ Introductory Elixir Problems
 MyRange.create(4, 9)
 # => [4, 5, 6, 7, 8, 9]
 ```
-1. FizzBuzz
+
+2. FizzBuzz
 ```
 FizzBuzz.fizz_buzz((1..20))
 # => [1, 2, "Fizz", 4, "Buzz", "Fizz", 7, 8, "Fizz", "Buzz", 11, "Fizz", 13, 14, "FizzBuzz", 16, 17, "Fizz", 19, "Buzz"]
 ```
-1. Sum list
+
+3. Sum list
 ```
 MyList.sum([1,2,3,4,5])
 # => 15
 ```
-1. my_reduce
+
+4. my_reduce
 ```
 MyList.my_reduce([1,2,3,4,5], 3, fn (el, acc) -> acc = acc * el end)
 # => 360
 ```
-1. my_select
+
+5. my_select
 ```
 MyList.my_select([1,2,3,4], fn el -> rem(el, 2) == 0 end)
 # => [2, 4]
 ```
-1. my_any?
+
+6. my_any?
 ```
 MyList.my_any?([1,2,3,4,5], fn el -> rem(el, 3) == 0 end)
 # => true
 MyList.my_any?([1,2,3,4,5], fn el -> rem(el, 7) == 0 end)
 # => false
 ```
-1. my_map
+
+7. my_map
 ```
 MyList.my_map([1,2,3,4], fn el -> el * el end)
 # => [1, 4, 9, 16]
 ```
-1. my_rotate
+
+8. my_rotate
 ```
 MyList.my_rotate([1,2,3,4], -3)
 # => [2, 3, 4, 1]
 MyList.my_rotate([1,2,3,4], 3)
 # => [4, 1, 2, 3]
 ```
-1. Remove duplicates from list
+
+9. Remove duplicates from list
 ```
 MyList.my_uniq([1,2,3,4,3,2,1,2,3,4,3,2,1])
 # => [1, 2, 3, 4]
 ```
-1. Substrings
+
+10. Substrings
 ```
 Substrings.substrings "abcd"
 # => ["d", "cd", "c", "bcd", "bc", "b", "abcd", "abc", "ab", "a", ""]
 ```
-1. my_flatten
+11. my_flatten
 ```
 MyList.my_flatten([1,[1,[1,2,3],2,3],2,3], [])
 # => [1, 1, 1, 2, 3, 2, 3, 2, 3]
 ```
-1. my_zip
+
+12. my_zip
 ```
 MyList.my_zip([1,2,3],[4,5,6])
 # => [[1, 4], [2, 5], [3, 6]]
 ```
-1. Mergesort
+
+13. Mergesort
 ```
 Mergesort.sort [1,4,23,6,2,5,6,3]
 # => [1, 2, 3, 4, 5, 6, 6, 23]
 ```
-1. Curry
+
+14. Curry
+```
+
+```
 
 Remember:
 
