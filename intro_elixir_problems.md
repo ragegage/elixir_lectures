@@ -83,7 +83,16 @@ Mergesort.sort [1,4,23,6,2,5,6,3]
 
 14. Curry
 ```
-
+fun = fn (a,b,c) -> a + b + c end
+f1 = Curry.curry fun
+f2 = f1.(1)
+f3 = f2.(2)
+f3.(3)
+# => 6
+fun2 = fn (a,b,c) -> a * b * c end
+f1 = Curry.curry fun2
+f1.(1).(2).(3)
+# => 6
 ```
 
 Remember:
