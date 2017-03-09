@@ -30,7 +30,6 @@ elem(tuple, 0) # 1
 
 put elem tuple, 1, "test" # {1, "test"}
 
-
 {a, b, c} = {1, :test, "hello"}
 a # 1
 {:ok, result} = {:ok, "went well"}
@@ -39,7 +38,6 @@ result # "went well"
 a = :ok
 {^a, result} = {:ok, 13}
 result # 13
-
 
 map = %{:a => 1, 2 => :b}
 map[:a] # 1
@@ -62,7 +60,6 @@ users[:john].age # 27
 users = put_in users[:john].age, 31
 users[:john].age # 31
 
-
 defmodule Math do
     def sum(a, b) do
         a + b
@@ -76,7 +73,6 @@ fun.(6, 7) # 13
 fun = fn x, y -> x + y end
 fun.(4, 3) # 7
 
-
 defmodule Recursion do
   def print_multiple_times(msg, n) when n <= 1 do
     IO.puts msg
@@ -88,17 +84,6 @@ defmodule Recursion do
   end
 end
 Recursion.print_multiple_times("Hello!", 3)
-
-defmodule Math do
-  def sum_list([head | tail], accumulator) do
-    sum_list(tail, head + accumulator)
-  end
-
-  def sum_list([], accumulator) do
-    accumulator
-  end
-end
-IO.puts Math.sum_list([1, 2, 3], 0)
 
 defmodule Math do
   def double_each([head | tail]) do
