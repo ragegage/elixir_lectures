@@ -114,13 +114,6 @@ defmodule Substrings do
   end
 end
 
-# Binary Search
-defmodule BSearch do
-  def go(list) do
-
-  end
-end
-
 # Mergesort
 defmodule Mergesort do
   def sort(list) when length(list) < 2 do
