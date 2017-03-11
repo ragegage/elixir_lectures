@@ -1,5 +1,7 @@
 Introductory Elixir Problems
 
+First, make sure you have elixir installed: [elixir site](http://elixir-lang.org/install.html)
+
 1. MyRange
 ```
 MyRange.create(4, 9)
