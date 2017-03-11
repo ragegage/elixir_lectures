@@ -1,5 +1,7 @@
 # auth
 
+[demo](https://github.com/ragegage/phoenix_auth)
+
 Note:
 mix phoenix.new login_app
 mix ecto.create
