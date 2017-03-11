@@ -46,6 +46,8 @@ http://highscalability.com/blog/2014/2/26/the-whatsapp-architecture-facebook-bou
 
 http://blog.carbonfive.com/2016/04/19/elixir-and-phoenix-the-future-of-web-apis-and-apps/
 
+Hex is the package manager for elixir
+
 ---
 
 ## Simple Demos
