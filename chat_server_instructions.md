@@ -1,5 +1,7 @@
 # Chat Server
 
+[solution](https://github.com/ragegage/chat_server)
+
 ## 1. Create new app
 
 Plan out the app. My plan, if you'd like to follow along, is as follows:
