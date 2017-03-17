@@ -2,20 +2,21 @@
 
 ---
 
-create a new phoenix app
+Create a new Phoenix app
 
 Note:
-mix phoenix.new APP_NAME
+`mix phoenix.new APP_NAME`
 
 ---
 
-set up the channel in `web/channels/user_socket.ex`
+Set up the channel in `web/channels/user_socket.ex`
 
 ---
 
-create `web/channels/room_channel.ex` and write the RoomChannel module
+Create `web/channels/room_channel.ex` and write the RoomChannel module
 
 Note:
+```
 defmodule HelloPhoenix.RoomChannel do
   use Phoenix.Channel
 
@@ -26,11 +27,11 @@ defmodule HelloPhoenix.RoomChannel do
     {:error, %{reason: "unauthorized"}}
   end
 end
-
+```
 ---
 
-set up `web/static/js/socket.js` so that its channel matches the RoomChannel
-module
+Set up `web/static/js/socket.js` so that its channel matches the
+RoomChannel module
 
 ---
 
@@ -38,19 +39,21 @@ module
 
 ---
 
-set up `web/templates/page/index.html.eex` to hold a list of chat messages and
-an input to create new ones
+Set up `web/templates/page/index.html.eex` to hold a list of chat
+messages and an input to create new ones
 
 Note:
+```
 <ul id="messages"></ul>
 <input id="chat-input" type="text"></input>
-
+```
 ---
 
-add event listeners to `web/static/js/socket.js` to write messages to the ul
-and read messages from the input
+Add event listeners to `web/static/js/socket.js` to write messages to
+the `ul` and read messages from the input
 
 Note:
+```
 let channel           = socket.channel("room:lobby", {})
 let chatInput         = document.querySelector("#chat-input")
 let messagesContainer = document.querySelector("#messages")
@@ -73,17 +76,18 @@ channel.join()
   .receive("error", resp => { console.log("Unable to join", resp) })
 
 export default socket
-
+```
 ---
 
-set up the room channel to broadcast new messages to all subscribers
+Set up the room channel to broadcast new messages to all subscribers
 
 Note:
+```
 def handle_in("new_msg", %{"body" => body}, socket) do
   broadcast! socket, "new_msg", %{body: body}
   {:noreply, socket}
 end
-
+```
 ---
 
 all done!
