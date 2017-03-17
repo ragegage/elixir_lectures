@@ -16,7 +16,7 @@ This repo holds my notes to prepare for an Elixir workshop.
     + [Intro Umbrella Apps lecture](./intro_umbrella_lecture.md)
     + [Intro Phoenix Lecture](./intro_phoenix_lecture.md)
     + [Chat demo](./phoenix_chat_demo.md)
-    + [Auth demo](./phoenix_auth_demo.md)
+    + [Auth demo (optional)](./phoenix_auth_demo.md)
   + Add Phoenix to Chat Server OTP project
     + [Umbrella & Phoenix project](./phoenix_umbrella.md)
 
