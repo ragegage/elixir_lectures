@@ -3,38 +3,50 @@
 
 Agenda:
 
-+ what is elixir
-+ simple demo
-+ processes demo
++ what is Elixir? (10 min)
++ demos & questions (20 min)
 
 Note:
 [main source](http://elixir-lang.org/getting-started/introduction.html)
 
 ---
 
+## What is Elixir?
+
+Elixir is a language that runs on Erlang's VM, much the same way that Scala runs on Java's VM
+
+`"functional ruby"`
+
+Note:
+Erlang ("Ericsson language") was created by Ericsson, which has about a 35 percent global market share in the wireless network infrastructure.
+
+Elixir was created by José Valim, a Rails core team member, in 2011.
+
+---
+
 ## elixir & erlang:
 
++ immutable
++ functional
++ process-based
+<br/><br/>
 ### known for
 + concurrency
 + fault tolerance
 + distribution
 + high availability
-<br/><br/>
-### features
-+ immutable
-+ functional
-+ process-based
+
+---
+
+## What does that mean?
+
+[Erlang was WhatsApp's "secret sauce"](https://blog.whatsapp.com/170/ONE-MILLION%21?p=170)
+
+[Elixir helped bleacherreport scale ridiculously](https://cdn.ampproject.org/c/www.techworld.com/apps/how-elixir-helped-bleacher-report-handle-8x-more-traffic-3653957/?amp)
+
+[2mil simultaneous users](http://www.phoenixframework.org/blog/the-road-to-2-million-websocket-connections)
 
 Note:
-Erlang was WhatsApp's "secret sauce" - https://blog.whatsapp.com/170/ONE-MILLION%21?p=170
-
-helped bleacherreport scale ridiculously - https://cdn.ampproject.org/c/www.techworld.com/apps/how-elixir-helped-bleacher-report-handle-8x-more-traffic-3653957/?amp
-
-Erlang ("Ericsson language") is a component of Ericsson, which has about a 35 percent global market share in the wireless network infrastructure.
-
-Elixir was created by José Valim, a Rails core team member, in 2011.
-
-2mil simultaneous users: http://www.phoenixframework.org/blog/the-road-to-2-million-websocket-connections
 
 [intro to erlang](http://learnyousomeerlang.com/introduction)
 
@@ -42,11 +54,11 @@ Elixir was created by José Valim, a Rails core team member, in 2011.
 
 [concurrency](http://learnyousomeerlang.com/the-hitchhikers-guide-to-concurrency)
 
-http://highscalability.com/blog/2014/2/26/the-whatsapp-architecture-facebook-bought-for-19-billion.html
+[whatsapp's architecture](http://highscalability.com/blog/2014/2/26/the-whatsapp-architecture-facebook-bought-for-19-billion.html)
 
-http://blog.carbonfive.com/2016/04/19/elixir-and-phoenix-the-future-of-web-apis-and-apps/
+[how productive is phoenix?](http://blog.carbonfive.com/2016/04/19/elixir-and-phoenix-the-future-of-web-apis-and-apps/)
 
-Hex is the package manager for elixir
+It has a package manager: Hex
 
 ---
 
