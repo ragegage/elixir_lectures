@@ -50,6 +50,14 @@ Elixir was created by José Valim, a Rails core team member, in 2011.
 
 ---
 
+Elixir is good for things like:
++ system modeling (supports multiple independent processes running concurrently)
++ chat servers
++ asynchronous work (concurrency, long-running, fault-tolerant processes)
++ API consumption (handles errors & malformed responses well)
+
+---
+
 **elixir:**
 division always returns a float; use the div method to do integer division
 `10 / 3 # float division -> 3.3333333333333335`
