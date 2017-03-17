@@ -503,7 +503,7 @@ names = Map.put(names, name, pid)
 Supervisor Trees: when supervisors supervise other supervisors
 
 supervisor strategies:
-+ :simple_one_for_one
++ :simple_one_for_one - when a worker dies, restart it
 + :one_for_one
 + :one_for_all - kill and restart all children processes whenever any one of
 them dies
@@ -578,3 +578,15 @@ Persistence
 + SQL
 + documents (mnesia, mongo, rethinkdb)
 + no persistence (in-memory storage: ETS)
+
+---
+
+# :sys
+
+allows you to trace a process's state
+
++ :sys.get_state(pid)
++ :sys.get_status(pid)
++ :sys.trace(pid, true)
++ :sys.no_debug(pid)
++ :sys.statistics(pid, true)
