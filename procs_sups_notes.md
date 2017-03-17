@@ -570,3 +570,11 @@ there is a limit on the number of current alive (running) processes: 32,768
 Sources:
 http://rob.conery.io/2016/02/17/red4-store-part-3/
 (and the other blog posts)
+
+---
+
+Persistence
+
++ SQL
++ documents (mnesia, mongo, rethinkdb)
++ no persistence (in-memory storage: ETS)
