@@ -1,6 +1,6 @@
 Introductory Elixir Problems
 
-First, make sure you have elixir installed: [elixir site](http://elixir-lang.org/install.html)
+First, make sure you have elixir [installed](http://elixir-lang.org/install.html).
 
 1. MyRange
 ```
