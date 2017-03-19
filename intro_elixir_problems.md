@@ -103,6 +103,6 @@ Remember:
 + open file in iex using `iex fizzbuzz.ex`
 + method definition shorthand: `def go(num), do: IO.puts(num)`
 
-[example elixir code snippets](./demos/intro_elixir_demo1.exs)
+[example elixir code snippets](./demos/intro_elixir_code_demo.md)
 
 [solutions](./intro_elixir_solutions.ex)
