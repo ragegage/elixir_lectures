@@ -167,7 +167,7 @@ char lists:
 you can see how many bytes a char list needs to encode its values using the `byte_size/1` function.
 binaries:
 you can define a binary (a sequence of bytes) using the following syntax: `<<1, 23, 14>>`. string concatenation in elixir is actually binary concatenation: `<<1, 2>> <> <<3>> # <<1, 2, 3>>`
-you can also pattern match with binaries: 
+you can also pattern match with binaries:
 ```
 <<1, 2, x>> = <<1, 2, 3>>
 x # 3
@@ -441,7 +441,7 @@ if you don't want to handle error outcomes (i.e., if you expect the file to be t
 
 ---
 
-`Path`: 
+`Path`:
 + `Path.join("foo", "bar") # "foo/bar"`
 + `Path.expand("~/hello") # /Users/ragegage/hello`
 
@@ -473,7 +473,7 @@ use Foo
 # ^ usually used in testing?
 ```
 
-Note: 
+Note:
 modules defined in Elixir are defined inside an `Elixir` namespace that
 you can omit
 
@@ -810,3 +810,6 @@ end
 ```
 
 ---
+
+Sources:
+http://cfenollosa.com/blog/the-elixir-of-concurrency.html
