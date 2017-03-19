@@ -1,3 +1,7 @@
+# Elixir code snippets
+
+## Strings
+
 "hello #{1+1}" # prints "hello 2"
 
 "he" <> rest = "hello"
@@ -6,10 +10,27 @@ String.length "test"
 
 String.upcase "test"
 
+## Anonymous Functions
+
 add = fn a, b -> a + b end
-add.(1, 2) # returns 3
+add.(1, 2) # => 3
+
+fun = &(&1 + &2)
+fun.(6, 7) # => 13
 
 (fn n -> n * n end).(6) # 36
+
+multi_heads = fn
+  1 -> "one"
+  2 -> "two"
+  _ -> "not one or two"
+end
+
+multi_heads.(1) # => "one"
+multi_heads.(2) # => "two"
+multi_heads.(3) # => "not one or two"
+
+## Lists
 
 [1,2,3] ++ [4,5,6]
 
@@ -17,18 +38,19 @@ add.(1, 2) # returns 3
 
 [h | rest] = [1,2,3]
 
-hd [1,2,3]
+hd [1,2,3] # => 1
 
-tl [1,2,3]
+tl [1,2,3] # => [2,3]
 
-[104, 101, 108, 108, 111] # 'hello'
+[104, 101, 108, 108, 111] # => 'hello'
 
-# q: what are tuples?
+## Tuples
+
 tuple = {1, :test}
 
-elem(tuple, 0) # 1
+elem(tuple, 0) # => 1
 
-put elem tuple, 1, "test" # {1, "test"}
+put elem tuple, 1, "test" # => {1, "test"}
 
 {a, b, c} = {1, :test, "hello"}
 a # 1
@@ -38,6 +60,8 @@ result # "went well"
 a = :ok
 {^a, result} = {:ok, 13}
 result # 13
+
+## Maps
 
 map = %{:a => 1, 2 => :b}
 map[:a] # 1
@@ -60,18 +84,14 @@ users[:john].age # 27
 users = put_in users[:john].age, 31
 users[:john].age # 31
 
+## Modules and Named Functions
+
 defmodule Math do
     def sum(a, b) do
         a + b
     end
 end
 Math.sum(1, 2) # 3
-
-fun = &(&1 + &2)
-fun.(6, 7) # 13
-
-fun = fn x, y -> x + y end
-fun.(4, 3) # 7
 
 defmodule Recursion do
   def print_multiple_times(msg, n) when n <= 1 do
@@ -95,6 +115,8 @@ defmodule Math do
   end
 end
 Math.double_each([1, 2, 3])
+
+## Pipe Operator
 
 odd? = &(rem(&1, 2) != 0)
 1..100_000 |> Enum.map(&(&1 * 3)) |> Enum.filter(odd?) |> Enum.sum
