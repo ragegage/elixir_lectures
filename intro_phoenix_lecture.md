@@ -48,6 +48,15 @@ say yes to everything
 
 ---
 
+### debugging
+
++ run the server using `iex -S mix phoenix.server`
++ `require IEx` at the top of any file
++ use `IEx.pry` like `debugger` in ruby or javascript
++ use `respawn()` like `continue` in ruby
+
+---
+
 ### router
 
 `METHOD "/ROUTE", CONTROLLER_NAME, :CONTROLLER_METHOD`

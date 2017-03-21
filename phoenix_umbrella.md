@@ -1,39 +1,30 @@
-# Umbrella Apps
-
-Umbrella apps are Elixir's way of supporting the suggestion to "never write large apps." Umbrella apps allow multiple apps to live in the same project and reference each other's functions.
-
-1. `mix new app_name --umbrella`
-1. move chat server project into `/apps`
-1. `mix phoenix.new chat_web`
-
-These two apps are now living in the same umbrella app and thus can interact with each other.
-
-# Chat
+# Chat Umbrella App
 
 This project will involve creating an umbrella app that combines a Phoenix web app with the ChatServer
-app (solutions available at https://github.com/ragegage/chat_server).
+app (solutions available at https://github.com/ragegage/chat_server). The Phoenix app will be able to 
+call the ChatServer app's functions, thus allowing users to interact with your ChatServer over the internet.
 
-## Combining the two apps
+## 1. Combining the two apps
 
 `mix new Chat --umbrella`
 
 Move the ChatServer app into the `apps` folder in the new Chat app.
 
-## Build a Chat Web App
+## 2. Build a Chat Web App
 
 The instructions for creating a chat app with Phoenix largely cover
 creating the web portion of this app; the only parts that have changed
 are the ChatWeb.RoomChannel module and the frontend code.
 
-### Create a new Phoenix App
+### 2.1 Create a new Phoenix App
 
 `mix phoenix.new APP_NAME`
 
-#### Designate the default channel
+#### 2.1.1 Designate the default channel
 
 In the user socket file (`web/channels/user_socket.ex`), designate the default channel (e.g., `room:lobby`).
 
-### Create a channel handler
+### 2.2 Create a channel handler
 
 The RoomChannel module will be in charge of connecting sessions to the appropriate socket and, eventually, receiving messages and broadcasting them out to all other users connected to that socket. It will have a `join/3` method that receives: 
 
@@ -59,18 +50,18 @@ defmodule Chat.RoomChannel do
 end
 ```
 
-### Edit the frontend socket code
+### 2.3 Edit the frontend socket code
 
-#### Socket.js
+#### 2.3.1 Socket.js
 
 Edit `web/static/js/socket.js` so that its channel matches the RoomChannel
 module.
 
-#### App.js
+#### 2.3.2 App.js
 
 `import from "./socket"` in `web/static/js/app.js`
 
-#### HTML template
+#### 2.3.3 HTML template
 
 set up `web/templates/page/index.html.eex` to hold a list of chat messages and
 an input to create new ones
@@ -81,7 +72,7 @@ e.g.,
 <input id="chat-input" type="text"></input>
 ```
 
-#### Socket.js event listeners
+#### 2.3.4 Socket.js event listeners
 
 Add event listeners to `web/static/js/socket.js` to write messages to the `ul`
 and read messages from the `input`
@@ -112,7 +103,7 @@ channel.join()
 export default socket
 ```
 
-### Add message handling to the RoomChannel
+### 2.4 Add message handling to the RoomChannel
 
 Now that our frontend is configured to send messages over the socket whenever a user enters text into the input, let's configure the RoomChannel module to handle the reception of those messages.
 
@@ -126,11 +117,11 @@ def handle_in("new_msg", %{"body" => body}, socket) do
 end
 ```
 
-### Test the app
+### 2.5 Test the app
 
 Try opening this app in multiple incognito windows and make sure that posted messages are visible to all users.
 
-## Modify the Chat Web App
+## 3. Modify the Chat Web App
 
 ChatWeb.RoomChannel should now start a link to the ChatServer.Supervisor and
 start a room whenever a user joins a room. If that room already
@@ -142,7 +133,7 @@ instructions: the response callback after a user joins a channel. The
 frontend now receives all previous messages from that channel from the
 backend, and so it adds each message to the unordered list of messages.
 
-## Add room creation
+## 4. Add room creation
 
 Next, let's implement the ChatServer feature where users can create
 their own chat rooms named whatever they want.
@@ -151,10 +142,10 @@ To do this, we'll need a way for users of our web app to input a chat
 room name, and tell our server to let people join whatever room they
 want.
 
-## TODO: Display list of rooms
+## 5. Display list of rooms
 
 Next, let's keep a list of rooms on the page at all times. A room will get added to the list once the user has joined it.
 
-## TODO: Display list of online users (using Presence)
+## 6. Display list of online users (using Presence)
 
-## TODO: Track idle-ness of online users (??)
+## 7. Track idle-ness of online users (??)

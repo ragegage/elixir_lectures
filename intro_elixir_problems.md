@@ -1,6 +1,12 @@
-Introductory Elixir Problems
+# Introductory Elixir Problems
 
-First, make sure you have elixir installed: [elixir site](http://elixir-lang.org/install.html)
+First, make sure you have elixir [installed](http://elixir-lang.org/install.html).
+
+## Remember:
+
++ Take a look at some [example elixir code snippets](./demos/intro_elixir_code_demo.md) or this great [cheatsheet](https://www.dropbox.com/s/lr1t87rw4wfnyb3/elixir-cheat-sheet-v2.pdf?dl=0) if you get stuck with the syntax
++ Try things out in `iex`
++ Open files in iex using `iex fizzbuzz.ex`
 
 1. MyRange
 ```
@@ -96,13 +102,5 @@ f1 = Curry.curry fun2
 f1.(1).(2).(3)
 # => 6
 ```
-
-Remember:
-
-+ cheatsheet: https://www.dropbox.com/s/lr1t87rw4wfnyb3/elixir-cheat-sheet-v2.pdf?dl=0
-+ open file in iex using `iex fizzbuzz.ex`
-+ method definition shorthand: `def go(num), do: IO.puts(num)`
-
-[example elixir code snippets](./demos/intro_elixir_demo1.exs)
 
 [solutions](./intro_elixir_solutions.ex)
