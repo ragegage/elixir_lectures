@@ -145,7 +145,7 @@ defmodule ChatServer.Supervisor do
   use Supervisor
 
   def start_link do
-    Supervisor.start_link(__MODULE__, [], name: :chat_supervisor)
+    Supervisor.start_link(__MODULE__, :ok, name: :chat_supervisor)
   end
 
   def init(:ok) do
@@ -165,8 +165,8 @@ Test your code using the following:
 ```
 ChatServer.Supervisor.start_link
 ChatServer.get() # => []
-ChatServer.create(, "hello world")
-ChatServer.get() # => [%ChatServer.Message{content: "chach", username: "anon"}]
+ChatServer.create("hello world")
+ChatServer.get() # => [%ChatServer.Message{content: "hello world", username: "anon"}]
 ```
 
 Bonus: Run `:sys.trace(ChatServer, true)` to get a debug trace of the
