@@ -37,6 +37,7 @@ mix phoenix.gen.model User users email:string password_digest:string
 Note:
 add `null:false` to email; `create unique_index(:users, [:email])`
 
+`mix ecto.migrate`
 ---
 
 ## edit user model
