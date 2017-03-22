@@ -123,6 +123,11 @@ end
 ```
 
 ```
+# templates/user/show.html.eex
+<p><%= @user.email %></p>
+```
+
+```
 # ../layout/app.html.eex
 <ul class="nav nav-pills pull-right">
   <li>
