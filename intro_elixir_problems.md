@@ -28,7 +28,7 @@ MyList.sum([1,2,3,4,5])
 
 4. my_reduce
 ```
-MyList.my_reduce([1,2,3,4,5], 3, fn (el, acc) -> acc = acc * el end)
+MyList.my_reduce([1,2,3,4,5], 3, fn (el, acc) -> acc * el end)
 # => 360
 ```
 
