@@ -1,369 +1,189 @@
-# Umbrella Apps
+# OOPS
 
-"never write large apps"
-- Abraham Lincoln
-
----
-
-Umbrella apps allow you to break up an app into multiple independent services that can interact with each other
-
----
-
-`mix new APP_NAME --umbrella`
-
-this app has an `apps` subfolder that holds other applications
-
-("application" means service in this case)
++ Dominick & Preston
++ elixir-lang.org
++ `r ModuleName` to reload it
++ `IEx.pry` & `respawn`
++ MSH Labs
 
 ---
 
-# Phoenix
+# OTP
 
-["Rails for Elixir"](http://rob.conery.io/2016/02/10/let-s-build-something-with-elixir/)
+(Open Telecom Platform)
 
-[Rails vs. Phoenix](https://littlelines.com/blog/2014/07/08/elixir-vs-ruby-showdown-phoenix-vs-rails)
-
-[2M simultaneous users]( http://www.phoenixframework.org/blog/the-road-to-2-million-websocket-connections)
-
-[Phoenix fans troll Rails](https://github.com/BlakeWilliams/rails)
-
----
-
-## Agenda
-
-+ setup (install phoenix & run server)
-+ outline of phoenix architecture
-+ build app
-
----
-
-### install phoenix:
-
-http://www.phoenixframework.org/docs/installation
-
----
-
-### create phoenix app
-
-`mix phoenix.new APP_NAME`
-
-`mix ecto.create`
-
-`mix phoenix.server` -> localhost:4000
-
----
-
-### phoenix architecture
-
-`/web` folder holds:
-
-+ the `router`
-+ `controllers`
-+ `templates`
-+ `views`
-+ `channels`
-+ `priv/static` holds static assets (css, images, js)
-+ `web/static` holds assets that need to be built (webpack, scss)
-+ `lib` holds the app's endpoint and other files that don't get recompiled between requests (e.g., if you need to store state between requests)
-
----
-
-### router
-
-`METHOD "/ROUTE", CONTROLLER_NAME, :CONTROLLER_METHOD`
-
-`get "/hello", HelloController, :index`
-
-`get "/hello/:message", HelloController, :show`
-
-`resources "/users", UserController`
++ Erlang
++ Tools & libraries
++ System design principles
 
 Note:
-route params are passed as a Map, with string keys
+OTP consists of these three things
 
 ---
 
-### controllers
+## Processes
 
-```
-defmodule HelloPhoenix.HelloController do
-  use HelloPhoenix.Web, :controller
-
-  def index(conn, _params) do
-    render conn, "index.html"
-  end
-
-  def show(conn, %{"message" => message}) do
-    render conn, "show.html", message: message
-  end
-end
-```
++ isolated from each other 
+  + each process has its own memory heap and garbage collector
++ run concurrent to each other
++ communicate via message passing
 
 Note:
-`conn` is a struct that holds data about the request
-`params` are the request's parameters
-  if you're not going to use the params, mark them with a `_`
-  you can pattern match against them (remember, they're a Map)
-`render conn, VIEW` finds the view in `web/templates/CONTROLLER_NAME` and tells the view to render it
+OOP?
 
 ---
 
-### views
+## Processes, con't.
 
-phoenix views render templates and also prepare data for use in the template
++ `spawn/1` creates a new process out of a function
++ `self/0` gives access to current process's pid
++ `send/2` send messages to a process
+  + sent messages get stored in the recipient's mailbox
++ `receive/1` searches the mailbox for a message that matches its patterns
++ `flush/0` flushes and prints all the messages in the mailbox
 
-```
-defmodule TestApp.HelloView do
-  use TestApp.Web, :view
-end
-```
+---
+
+## State
+
+State is most commonly kept in processes that loop infinitely, maintain state, and send and receive messages
+
+---
+
+### Simple Counter state example
 
 Note:
-the "X" in "XController" must match the "X" in "XView"
+this and further demos are in elixir_processes_demo.ex
 
 ---
 
-### templates
+### Counter state example with API
 
-phoenix templates use `.eex` by default -> embedded elixir (like `.erb`)
+---
 
-```
-<div class="jumbotron">
-  <h2>Hello World, from Phoenix!</h2>
-</div>
-```
+## Agents
 
-loops over list of users, called user template for each user
-```
-<%= for user <- users @conn do %>
-  <%= @user %>
-  <!-- equivalent to:
-    <%= render HelloPhoenix.PageView, "user.html", user: user %>
-  -->
-<% end %>
-```
+Agents are wrappers for this looping state idea
+
+#### API
+
++ `start_link/1`
++ `update/2`
++ `get/2`
++ `stop/1`
+
+---
+
+### Agent refactor
 
 Note:
-the "X" in "XController" shuold also be in the path to the template:
-`web/templates/X/index.html.eex`
-
-just like rails, there is a `layout` html
-
-just like rails, `<%= %>` writes code output into html
-
-just like rails, you use `@variable` to refer to a variable passed in from a
-controller; unlike rails, `@` is short here for `Map.get(assigns, :variable)`
+source for this and the previous few slides: http://dantswain.herokuapp.com/blog/2015/01/06/storing-state-in-elixir-with-processes/
 
 ---
 
-### channels
+## GenServers
 
-send / receive messages via a socket
+a GenServer is a loop that handles one request per iteration passing along an updated state
 
-handlers - authenticate and identify socket connections
-routes - defined in socket handlers; match on topic string
-channels - similar to controllers, persist beyond one request/response cycle
+accepts two types or requests:
+
++ calls -> synchronous, server must repond
++ casts -> async, server won't respond
 
 Note:
-
-### channels, con't.
-
-+ methods: `join/3`, `terminate/2`, `handle_in/3`, `handle_out/3`
-+ messages - struct with `topic`, `event`, `payload`, and `ref`
-+ topics - string identifiers
-+ transports - handle message dispatching into and out of a channel
-+ transport adapters - websockets with a fallback to longpolling, or custom
-+ client libraries - phoenix ships with a JS client; can get other clients as well
-
-
-`web/channels/user_socket.ex` -> write channels into the `## Channels` section
-
-create `web/channels/room_channel.ex`; implement `join/3`: (update with my demo code)
+this is an example of monitoring a process and getting a message when it stops
+running
 ```
-defmodule HelloPhoenix.RoomChannel do
-  use Phoenix.Channel
-
-  def join("room:lobby", _message, socket) do
-    {:ok, socket}
-  end
-  def join("room:" <> _private_room_id, _params, _socket) do
-    {:error, %{reason: "unauthorized"}}
-  end
-end
-```
-configure the chat room/s in `web/channels/room_channel.ex`
-
-use phoenix's js bindings for sockets to accept input and handle `new_msg` events by writing those messages to the html (`web/static/js/socket.js`)
-
-write some simple html into `web/templates/page/index.html.eex` to hold text input and messages
-
-(back in `room_channel.ex`)
-incoming events are caught by `handle_in/3`; outgoing events are send by using `broadcast!/3` (calls a `handle_out/3` function that is implemented by default)
-
-```
-def handle_in("new_msg", %{"body" => body}, socket) do
-  broadcast! socket, "new_msg", %{body: body}
-  {:noreply, socket}
-end
-
-def handle_out("new_msg", payload, socket) do
-  push socket, "new_msg", payload
-  {:noreply, socket}
-end
-```
-^ we can overwrite the default `handle_out/3` function to allow our chat app to
-intercept (i.e., not broadcast) certain events or types of events
-
----
-
-### schemas
-#### ("models" in Rails)
-
-handled by **Ecto**
-
-+ migrations
-  + `mix ecto.create`
-  + `mix ecto.gen.migration create_dogs`
-  + `mix ecto.migrate`
-
-+ changesets are the equivalent of rails validations
-
----
-
-### phoenix's scaffold
-
-`mix phoenix.gen.html User users name:string email:string bio:string number_of_pets:integer`
-
-creates a migration, controller, controller test, model, model test, view, templates
-
----
-
-### controller methods
-
-(using models in controllers)
-
-**very similar to rails controllers**
-
-Note:
-
-```
-# UserController
-
-alias HelloPhoenix.User # allows us to just use User
-
-def index(conn, _params) do
-  # select all users
-  users = Repo.all(User)
-  # render all users into index.html
-  render(conn, "index.html", users: users)
-end
-
-def show(conn, %{"id" => id}) do
-  user = Repo.get!(User, id)
-  render(conn, "show.html", user: user)
-end
-
-def new(conn, _params) do
-  changeset = User.changeset(%User{})
-  render(conn, "new.html", changeset: changeset)
-end
-
-def create(conn, %{"user" => user_params}) do
-  changeset = User.changeset(%User{}, user_params)
-
-  case Repo.insert(changeset) do
-    {:ok, _user} ->
-      conn
-      |> put_flash(:info, "User created successfully.")
-      |> redirect(to: user_path(conn, :index))
-    {:error, changeset} ->
-      render(conn, "new.html", changeset: changeset)
-  end
-end
-
-def edit(conn, %{"id" => id}) do
-  user = Repo.get!(User, id)
-  changeset = User.changeset(user)
-  render(conn, "edit.html", user: user, changeset: changeset)
-end
-
-def update(conn, %{"id" => id, "user" => user_params}) do
-  user = Repo.get!(User, id)
-  changeset = User.changeset(user, user_params)
-
-  case Repo.update(changeset) do
-    {:ok, user} ->
-      conn
-      |> put_flash(:info, "User updated successfully.")
-      |> redirect(to: user_path(conn, :show, user))
-    {:error, changeset} ->
-      render(conn, "edit.html", user: user, changeset: changeset)
-  end
-end
-
-def delete(conn, %{"id" => id}) do
-  user = Repo.get!(User, id)
-
-  # Here we use delete! (with a bang) because we expect
-  # it to always work (and if it does not, it will raise).
-  Repo.delete!(user)
-
-  conn
-  |> put_flash(:info, "User deleted successfully.")
-  |> redirect(to: user_path(conn, :index))
-end
+{:ok, pid} = Agent.start_link(fn -> [] end) # {:ok, #PID<0.91.0>}
+Process.monitor pid # #Reference<0.0.4.150>
+Agent.stop pid # :ok
+flush() # {:DOWN, #Reference<0.0.4.150>, :process, #PID<0.91.0>, :normal}
+flush # :ok
 ```
 
 ---
 
-### associations
+GenServer refactor
 
-`has_many`, `belongs_to`, `has_one`
-
-rails' `includes` is called `preload` in phoenix:
-`users = User |> Repo.all |> Repo.preload([:videos])`
-
-Note:
-```
-# command line
-mix phoenix.gen.model Video videos name:string approved_at:datetime description:text likes:integer views:integer user_id:references:users
-# note the "user_id:references:users" - that sets up the association in the Video model
-```
-```
-# Video model
-schema "videos" do
-  field :name, :string
-  field :approved_at, Ecto.DateTime
-  field :description, :string
-  field :likes, :integer
-  field :views, :integer
-  belongs_to :user, HelloPhoenix.User
-
-  timestamps()
-end
-```
-```
-# User model
-schema "users" do
-  field :name, :string
-  field :email, :string
-  field :bio, :string
-  field :number_of_pets, :integer
-
-  # association with videos table
-  has_many :videos, HelloPhoenix.Video
-
-  timestamps()
-end
-```
 ---
 
-### sessions
+## Structs
+
+can define a struct that holds state information:
+`defstruct [id: nil, items: [], key: nil]`
+
+create that struct using input like so:
+`struct(%AppName.ProcessName{}, map_of_input_values)`
+
+and edit like so:
+`%{struct_name | items: List.insert_at(struct_name.items, -1, item)}`
+(this updates the `items` key and leaves the rest unchanged)
+
+---
+
+## Supervisors
+
+Supervisors keep track of processes and can restart them if they crash
+
+#### Tips
++ assign names to processes under supervision so that they can be restarted and get a new pid without it being a headache
+  + register the process under the same name of the module that defines it
+
+---
+
+### Supervision Trees: when supervisors supervise other supervisors
+
+#### supervisor strategies:
+
++ :one_for_one - if a child dies, it will be the only one restarted
++ :simple_one_for_one - specify a worker template and supervise many children based on this template
++ :one_for_all - kill and restart all children processes whenever any one of
+them dies
++ :rest_for_one - when a child process crashes, kill and restart child
+processes that were started after the crashed child
+
+---
+
+## Extra Stuff
+
+---
+
+Observer
+
+`:observer.start` brings up a GUI with the following functionality:
+
++ you can select your application and see the supervisors & processes your
+application is spawning
++ you can double-click a process and access information about it
++ you can right-click a process to send a "kill signal" (a way to emulate
+failures)
+
+---
+
+ETS
+
+Erlang Term Storage can be used as a cache
++ log and analyze your application to find bottlenecks; this will let you know
+what to cache
++ data can be read asynchronously; this might produce race conditions
 
 ```
-conn = put_session(conn, :session_token, "session token value here")
-message = get_session(conn, :session_token)
+table = :ets.new(:table, [:named_table, read_concurrency: true]) # 8207
+:ets.insert(:table, {"foo", self()}) # true
+:ets.lookup(:table, "foo") # [{"foo", #PID<0.41.0>}]
 ```
+
+---
+
+# Mix
+
+Mix is the build tool that ships with Elixir (creating applications, compiling, testing, managing dependencies, &c.)
+
+---
+
+### Errata
+
+there is a limit on the number of current alive (running) processes: 32,768
 
 ---
 
