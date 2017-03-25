@@ -26,13 +26,17 @@ In the user socket file (`web/channels/user_socket.ex`), designate the default c
 
 ### 2.2 Create a channel handler
 
-The RoomChannel module will be in charge of connecting sessions to the appropriate socket and, eventually, receiving messages and broadcasting them out to all other users connected to that socket. It will have a `join/3` method that receives: 
+The RoomChannel module will be in charge of connecting sessions to 
+the appropriate socket and, eventually, receiving messages and 
+broadcasting them out to all other users connected to that socket. 
+It will have a `join/3` method that receives: 
 
 + the channel you designated in the previous step (e.g., `room:lobby`)
 + any message sent along with the channel join request
 + the socket
 
-and returns `{:ok, socket}`. It should also return an error tuple if someone tries to join a different room.
+and returns `{:ok, socket}`. It should also return an error tuple if 
+someone tries to join a different room.
 
 Create `web/channels/room_channel.ex` and write the RoomChannel module.
 
@@ -119,7 +123,8 @@ end
 
 ### 2.5 Test the app
 
-Try opening this app in multiple incognito windows and make sure that posted messages are visible to all users.
+Try opening this app in multiple incognito windows and make sure that 
+posted messages are visible to all users.
 
 ## 3. Modify the Chat Web App
 
@@ -127,6 +132,9 @@ ChatWeb.RoomChannel should now start a link to the ChatServer.Supervisor and
 start a room whenever a user joins a room. If that room already
 exists, the list of previous chats from that room are returned to the
 frontend along with the socket.
+
+All of the apps in your umbrella app are compiled together, so you can call 
+functions from the ChatServer from the ChatWeb module.
 
 The frontend only updates one handler from the other set of chat app
 instructions: the response callback after a user joins a channel. The
