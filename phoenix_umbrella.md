@@ -128,10 +128,28 @@ posted messages are visible to all users.
 
 ## 3. Modify the Chat Web App
 
-ChatWeb.RoomChannel should now start a link to the ChatServer.Supervisor and
-start a room whenever a user joins a room. If that room already
-exists, the list of previous chats from that room are returned to the
-frontend along with the socket.
+ChatWeb.RoomChannel should now start a room whenever a user joins a room. 
+If that room already exists, the list of previous chats from that room 
+should be returned to the frontend along with the socket.
+
+In order for `start_room/1` to work, however, we'll need the 
+ChatServer.Supervisor to have already been started. To set up the 
+application so that it starts the Supervisor automatically, follow these
+steps:
+
+Adding ChatServer.Supervisor to your list of extra applications will ensure
+that it is started (its `start` method will be called) when the application 
+starts, with a given list of arguments passed to it.
+
++ Add the ChatServer.Supervisor to your ChatServer app's `mix.exs' file
+  + ```
+    def application do
+      [extra_applications: [:logger],
+       mod: {ChatServer.Supervisor, []}]
+    end
+    ```
++ Add `use Application` to your ChatServer.Supervisor module
++ Implement `start/2` in ChatServer.Supervisor; it should call `start_link/0`
 
 All of the apps in your umbrella app are compiled together, so you can call 
 functions from the ChatServer from the ChatWeb module.
