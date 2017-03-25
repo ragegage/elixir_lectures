@@ -1,11 +1,20 @@
-# Umbrella Apps
+### Corrections
 
-"never write large apps"
-- Abraham Lincoln
++ you can also roll your own supervisor strategy using `process_flag(trap_exit, true)`
++ use `h ModuleName` & `h ModuleName.function` to access documentation
 
 ---
 
+# Umbrella Apps
+
+---
+
+**"never write large apps"
+- Albert Einstein**
+
 Umbrella apps allow you to break up an app into multiple independent services that can interact with each other
+
+the entire app is compiled together
 
 ---
 
@@ -25,7 +34,9 @@ this app has an `apps` subfolder that holds other applications
 
 [2M simultaneous users]( http://www.phoenixframework.org/blog/the-road-to-2-million-websocket-connections)
 
-[Phoenix fans troll Rails](https://github.com/BlakeWilliams/rails)
+[The Rails gem for Phoenix](https://github.com/BlakeWilliams/rails)
+
+[www.phoenixframework.org](http://www.phoenixframework.org/)
 
 ---
 
@@ -65,6 +76,82 @@ http://www.phoenixframework.org/docs/installation
 + `priv/static` holds static assets (css, images, js)
 + `web/static` holds assets that need to be built (webpack, scss)
 + `lib` holds the app's endpoint and other files that don't get recompiled between requests (e.g., if you need to store state between requests)
+
+---
+
+### phoenix's scaffold
+
+`mix phoenix.gen.html User users name:string email:string bio:string number_of_pets:integer`
+
+creates a migration, controller, controller test, model, model test, view, templates
+
+---
+
+### channels
+
+send / receive messages via a socket
+
++ handlers - authenticate and identify socket connections
++ routes - defined in socket handlers; match on topic string
++ channels - similar to controllers, persist beyond one request/response cycle
+
+Note:
+
+### channels, con't.
+
++ methods: `join/3`, `terminate/2`, `handle_in/3`, `handle_out/3`
++ messages - struct with `topic`, `event`, `payload`, and `ref`
++ topics - string identifiers
++ transports - handle message dispatching into and out of a channel
++ transport adapters - websockets with a fallback to longpolling, or custom
++ client libraries - phoenix ships with a JS client; can get other clients as well
+
+
+`web/channels/user_socket.ex` -> write channels into the `## Channels` section
+
+create `web/channels/room_channel.ex`; implement `join/3`: (update with my demo code)
+```
+defmodule HelloPhoenix.RoomChannel do
+  use Phoenix.Channel
+
+  def join("room:lobby", _message, socket) do
+    {:ok, socket}
+  end
+  def join("room:" <> _private_room_id, _params, _socket) do
+    {:error, %{reason: "unauthorized"}}
+  end
+end
+```
+configure the chat room/s in `web/channels/room_channel.ex`
+
+use phoenix's js bindings for sockets to accept input and handle `new_msg` events by writing those messages to the html (`web/static/js/socket.js`)
+
+write some simple html into `web/templates/page/index.html.eex` to hold text input and messages
+
+(back in `room_channel.ex`)
+incoming events are caught by `handle_in/3`; outgoing events are send by using `broadcast!/3` (calls a `handle_out/3` function that is implemented by default)
+
+```
+def handle_in("new_msg", %{"body" => body}, socket) do
+  broadcast! socket, "new_msg", %{body: body}
+  {:noreply, socket}
+end
+
+def handle_out("new_msg", payload, socket) do
+  push socket, "new_msg", payload
+  {:noreply, socket}
+end
+```
+^ we can overwrite the default `handle_out/3` function to allow our chat app to
+intercept (i.e., not broadcast) certain events or types of events
+
+---
+
+### channels, con't.
+
++ methods: `join/3`, `handle_in/3`
++ transport adapters - websockets with a fallback to longpolling, or custom
++ client libraries - phoenix ships with a JS client; can get other clients as well
 
 ---
 
@@ -156,66 +243,6 @@ controller; unlike rails, `@` is short here for `Map.get(assigns, :variable)`
 
 ---
 
-### channels
-
-send / receive messages via a socket
-
-handlers - authenticate and identify socket connections
-routes - defined in socket handlers; match on topic string
-channels - similar to controllers, persist beyond one request/response cycle
-
-Note:
-
-### channels, con't.
-
-+ methods: `join/3`, `terminate/2`, `handle_in/3`, `handle_out/3`
-+ messages - struct with `topic`, `event`, `payload`, and `ref`
-+ topics - string identifiers
-+ transports - handle message dispatching into and out of a channel
-+ transport adapters - websockets with a fallback to longpolling, or custom
-+ client libraries - phoenix ships with a JS client; can get other clients as well
-
-
-`web/channels/user_socket.ex` -> write channels into the `## Channels` section
-
-create `web/channels/room_channel.ex`; implement `join/3`: (update with my demo code)
-```
-defmodule HelloPhoenix.RoomChannel do
-  use Phoenix.Channel
-
-  def join("room:lobby", _message, socket) do
-    {:ok, socket}
-  end
-  def join("room:" <> _private_room_id, _params, _socket) do
-    {:error, %{reason: "unauthorized"}}
-  end
-end
-```
-configure the chat room/s in `web/channels/room_channel.ex`
-
-use phoenix's js bindings for sockets to accept input and handle `new_msg` events by writing those messages to the html (`web/static/js/socket.js`)
-
-write some simple html into `web/templates/page/index.html.eex` to hold text input and messages
-
-(back in `room_channel.ex`)
-incoming events are caught by `handle_in/3`; outgoing events are send by using `broadcast!/3` (calls a `handle_out/3` function that is implemented by default)
-
-```
-def handle_in("new_msg", %{"body" => body}, socket) do
-  broadcast! socket, "new_msg", %{body: body}
-  {:noreply, socket}
-end
-
-def handle_out("new_msg", payload, socket) do
-  push socket, "new_msg", payload
-  {:noreply, socket}
-end
-```
-^ we can overwrite the default `handle_out/3` function to allow our chat app to
-intercept (i.e., not broadcast) certain events or types of events
-
----
-
 ### schemas
 #### ("models" in Rails)
 
@@ -227,14 +254,6 @@ handled by **Ecto**
   + `mix ecto.migrate`
 
 + changesets are the equivalent of rails validations
-
----
-
-### phoenix's scaffold
-
-`mix phoenix.gen.html User users name:string email:string bio:string number_of_pets:integer`
-
-creates a migration, controller, controller test, model, model test, view, templates
 
 ---
 
