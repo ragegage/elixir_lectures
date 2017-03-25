@@ -174,4 +174,4 @@ Next, let's keep a list of rooms on the page at all times. A room will get added
 
 ## 6. Display list of online users (using Presence)
 
-## 7. Track idle-ness of online users (??)
+## 7. Require login to access chat
