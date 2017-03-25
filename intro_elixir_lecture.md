@@ -40,11 +40,11 @@ Elixir was created by José Valim, a Rails core team member, in 2011.
 
 ## What does that mean?
 
-[Erlang was WhatsApp's "secret sauce"](https://blog.whatsapp.com/170/ONE-MILLION%21?p=170)
+[WhatsApp's stack was based on Erlang](https://blog.whatsapp.com/170/ONE-MILLION%21?p=170)
 
 [Elixir helped bleacherreport scale ridiculously](https://cdn.ampproject.org/c/www.techworld.com/apps/how-elixir-helped-bleacher-report-handle-8x-more-traffic-3653957/?amp)
 
-[2mil simultaneous users](http://www.phoenixframework.org/blog/the-road-to-2-million-websocket-connections)
+[2mil simultaneous users on Phoenix](http://www.phoenixframework.org/blog/the-road-to-2-million-websocket-connections)
 
 Note:
 
@@ -62,15 +62,39 @@ It has a package manager: Hex
 
 ---
 
-## Simple Demos
+## Things to know, part 1
+
++ `[]` is a linked list
++ `{}` is a tuple
++ `%{}` is a map
 
 Note:
-
 lists are stored in memory as linked lists; prepending elements is O(1) but finding the length is O(n).
 
 because data types are immutable in elixir, the original tuple isn't changed.
 
 tuples are stored contiguously in memory; finding the length is O(1) but changing elements is O(n) because it requires copying the tuple's entire contents to a new tuple.
+
+---
+
+## Things to know, part 2
+
++ no mutations
++ no methods, only modules
++ `=`
++ enumerating
++ function heads & guards
++ anonymous functions
++ `|>`
+
+---
+
+## Pattern Matching Extras
+
++ you can use the `^` operator to pattern match against a variable's value
++ if you don't care about a value in a pattern, you can use `_` to fill that space
+
+Note:
 
 (you can use the `^` operator to pattern match against a variable's value:)
 
