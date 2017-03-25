@@ -28,7 +28,8 @@ set up the ChatWeb app's JavaScript dependencies.
 
 #### 2.1.1 Designate the default channel
 
-In the user socket file (`web/channels/user_socket.ex`), designate the default channel (e.g., `room:lobby`).
+In the user socket file (`web/channels/user_socket.ex`), change the default 
+channel from `room:*` to `room:lobby`.
 
 ### 2.2 Create a channel handler
 
