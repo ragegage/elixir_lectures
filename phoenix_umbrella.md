@@ -16,6 +16,8 @@ The instructions for creating a chat app with Phoenix largely cover
 creating the web portion of this app; the only parts that have changed
 are the ChatWeb.RoomChannel module and the frontend code.
 
+Install Phoenix here: [http://www.phoenixframework.org/docs/installation](http://www.phoenixframework.org/docs/installation).
+
 Note: If you get a `Could not start node watcher because script ".../brunch"
 does not exist` error, `cd` into the `chat_web` app and run `npm install` to
 set up the ChatWeb app's JavaScript dependencies.
