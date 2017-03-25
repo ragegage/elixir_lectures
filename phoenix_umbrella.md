@@ -66,7 +66,7 @@ end
 #### 2.3.1 Socket.js
 
 Edit `web/static/js/socket.js` so that its channel matches the RoomChannel
-module.
+module. This will probably entail changing `"topic:subtopic"` to `"room:lobby"`.
 
 #### 2.3.2 App.js
 
@@ -74,7 +74,7 @@ module.
 
 #### 2.3.3 HTML template
 
-set up `web/templates/page/index.html.eex` to hold a list of chat messages and
+Set up `web/templates/page/index.html.eex` to hold a list of chat messages and
 an input to create new ones
 
 e.g.,
