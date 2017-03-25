@@ -2,6 +2,8 @@
 
 [solution](https://github.com/ragegage/chat_server)
 
+[demo from lecture](./demos/lecture_processes_demo.ex)
+
 ## 1. Create new app
 
 Plan out the app. My plan, if you'd like to follow along, is as follows:
