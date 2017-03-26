@@ -23,7 +23,7 @@ OTP consists of these three things
 
 ## Processes
 
-+ isolated from each other 
++ isolated from each other
   + each process has its own memory heap and garbage collector
 + run concurrent to each other
 + communicate via message passing
@@ -148,7 +148,7 @@ processes that were started after the crashed child
 
 ---
 
-Observer
+### Observer
 
 `:observer.start` brings up a GUI with the following functionality:
 
@@ -160,7 +160,19 @@ failures)
 
 ---
 
-ETS
+### :sys
+
+allows you to trace a process's state
+
++ :sys.get_state(pid)
++ :sys.get_status(pid)
++ :sys.trace(pid, true)
++ :sys.no_debug(pid)
++ :sys.statistics(pid, true)
+
+---
+
+### ETS
 
 Erlang Term Storage can be used as a cache
 + log and analyze your application to find bottlenecks; this will let you know
@@ -172,6 +184,14 @@ table = :ets.new(:table, [:named_table, read_concurrency: true]) # 8207
 :ets.insert(:table, {"foo", self()}) # true
 :ets.lookup(:table, "foo") # [{"foo", #PID<0.41.0>}]
 ```
+
+---
+
+### Persistence
+
++ SQL
++ documents (mnesia, mongo, rethinkdb)
++ no persistence (in-memory storage: ETS)
 
 ---
 
