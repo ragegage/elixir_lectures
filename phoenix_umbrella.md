@@ -130,8 +130,13 @@ end
 
 ### 2.5 Test the app
 
+Run `mix phoenix.server` and open your app at `localhost:4000`!
+
 Try opening this app in multiple incognito windows and make sure that 
 posted messages are visible to all users.
+
+If you haven't yet run `mix ecto.create`, you will need to run that command
+before your server will run.
 
 ## 3. Modify the Chat Web App
 
