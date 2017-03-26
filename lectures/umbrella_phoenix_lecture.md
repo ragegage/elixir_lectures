@@ -1,9 +1,3 @@
-### Corrections
-
-+ you can also roll your own supervisor strategy using `process_flag(trap_exit, true)`
-+ use `h ModuleName` & `h ModuleName.function` to access documentation
-
----
 
 # Umbrella Apps
 

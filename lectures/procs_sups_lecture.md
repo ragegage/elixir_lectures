@@ -1,12 +1,3 @@
-# OOPS
-
-+ Dominick & Preston
-+ elixir-lang.org
-+ `r ModuleName` to reload it
-+ `IEx.pry` & `respawn`
-+ MSH Labs
-
----
 
 # OTP
 
@@ -141,6 +132,7 @@ Supervisors keep track of processes and can restart them if they crash
 them dies
 + :rest_for_one - when a child process crashes, kill and restart child
 processes that were started after the crashed child
++ or roll your own supervisor strategy using `trap_exit`
 
 ---
 

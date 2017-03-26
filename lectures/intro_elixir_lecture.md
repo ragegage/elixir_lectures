@@ -89,6 +89,16 @@ tuples are stored contiguously in memory; finding the length is O(1) but changin
 
 ---
 
+## Things to know, part 3
+
++ inside an iex session:
+  + use `h ModuleName` & `h ModuleName.function` to access documentation
+  + use `r ModuleName` to reload a module
++ use `IEx.pry` to stop execution inside a function (like ruby's `debugger`)
+  + use `respawn` to continue execution from within pry
+
+---
+
 ## Pattern Matching Extras
 
 + you can use the `^` operator to pattern match against a variable's value
