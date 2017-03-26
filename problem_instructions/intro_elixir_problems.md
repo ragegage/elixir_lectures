@@ -4,7 +4,7 @@ First, make sure you have elixir [installed](http://elixir-lang.org/install.html
 
 ## Remember:
 
-+ Take a look at some [example elixir code snippets](./demos/intro_elixir_code_demo.md), [the demo from lecture](./demos/lecture_demo.ex), or this great [cheatsheet](https://www.dropbox.com/s/lr1t87rw4wfnyb3/elixir-cheat-sheet-v2.pdf?dl=0) if you get stuck with the syntax
++ Take a look at some [example elixir code snippets](../demos/intro_elixir_code_demo.md), [the demo from lecture](../demos/lecture_demo.ex), or this great [cheatsheet](https://www.dropbox.com/s/lr1t87rw4wfnyb3/elixir-cheat-sheet-v2.pdf?dl=0) if you get stuck with the syntax
 + Try things out in `iex`
 + Open files in iex using `iex fizzbuzz.ex`
 

@@ -128,7 +128,7 @@ end
 ```
 
 ```
-# ../layout/app.html.eex
+# layout/app.html.eex
 <ul class="nav nav-pills pull-right">
   <li>
     <%= link "Register", to: user_path(@conn, :new) %>
@@ -519,7 +519,7 @@ scope "/", LoginApp do
 
   scope "/" do
     pipe_through [:login_required]
-    
+
     get "/chat", PageController, :index
   end
 end

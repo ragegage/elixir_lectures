@@ -2,7 +2,7 @@
 
 [solution](https://github.com/ragegage/chat_server)
 
-[demo from lecture](./demos/lecture_processes_demo.ex)
+[demo from lecture](../demos/lecture_processes_demo.ex)
 
 ## 1. Create new app
 
