@@ -103,6 +103,7 @@ tuples are stored contiguously in memory; finding the length is O(1) but changin
 + inside an iex session:
   + use `h ModuleName` & `h ModuleName.function` to access documentation
   + use `r ModuleName` to reload a module
+  + use `i variable` to introspect that variable
 + use `IEx.pry` to stop execution inside a function (like ruby's `debugger`)
   + use `respawn` to continue execution from within pry
 
