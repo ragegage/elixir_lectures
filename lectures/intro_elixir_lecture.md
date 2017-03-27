@@ -13,14 +13,18 @@ Note:
 
 ## What is Elixir?
 
-Elixir is a language that runs on Erlang's VM, much the same way that Scala runs on Java's VM
+Elixir compiles to BEAM bytecode, the same as Erlang
 
-`"functional ruby"`
+BEAM bytecode runs on Erlang's VM
 
 Note:
-Erlang ("Ericsson language") was created by Ericsson, which has about a 35 percent global market share in the wireless network infrastructure.
+Erlang ("Ericsson language") was created by Ericsson, which has about 
+a 35 percent global market share in the wireless network infrastructure.
 
 Elixir was created by José Valim, a Rails core team member, in 2011.
+
+Despite some of the stylistic similarities between Elixir and Ruby, 
+it doesn't make sense to describe Elixir as `"functional Ruby"`
 
 ---
 
@@ -35,6 +39,9 @@ Elixir was created by José Valim, a Rails core team member, in 2011.
 + fault tolerance
 + distribution
 + high availability
+
+Note:
+It might not make sense to describe Elixir as "functional"
 
 ---
 
