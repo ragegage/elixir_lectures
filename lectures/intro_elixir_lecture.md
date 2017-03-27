@@ -73,7 +73,7 @@ It has a package manager: Hex
 
 ## Things to know, part 1
 
-+ `[]` is a linked list
++ `[]` is a (singly) linked list
 + `{}` is a tuple
 + `%{}` is a map
 
