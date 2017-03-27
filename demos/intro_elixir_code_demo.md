@@ -159,3 +159,22 @@ odd? = &(rem(&1, 2) != 0)
 Enum.take(Stream.cycle([1,2,3]),10)
 Enum.take(Stream.cycle([1,2,3]),10) |> Enum.filter(odd?)
 ```
+
+## Debugging
+
+```
+# to stop code and inspect values
+require IEx
+IEx.pry
+```
+
+```
+# to view documentation for modules and functions
+h ModuleName
+h ModuleName.function
+```
+
+```
+# to introspect a variable, e.g., i "hello"
+i variable
+```
