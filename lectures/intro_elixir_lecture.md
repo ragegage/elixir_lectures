@@ -41,7 +41,9 @@ it doesn't make sense to describe Elixir as `"functional Ruby"`
 + high availability
 
 Note:
-It might not make sense to describe Elixir as "functional"
+Elixir is functional in the sense that Lisp is functional 
++ it adheres to the basic functional programming paradigms, but it does allow side effects
++ sending messages is a good example of the side effects allowed in elixir functions
 
 ---
 
